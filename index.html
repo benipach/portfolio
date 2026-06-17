@@ -203,9 +203,7 @@
 
     @keyframes raceLoad {
       0% { width: 0%; }
-      60% { width: 75%; }
-      80% { width: 78%; }
-      100% { width: 78%; }
+      100% { width: 90%; }
     }
 
     .race-bar-pct {
@@ -449,7 +447,7 @@
     /* PROJECTS */
     #projects .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.25rem;
     }
 
@@ -1008,7 +1006,7 @@
       <div class="race-bar-container">
         <div class="race-bar-fill"></div>
       </div>
-      <div class="race-bar-pct"><span>78%</span> toward my first year of real experience</div>
+      <div class="race-bar-pct"><span>90%</span>of Technical High School completed</div>
 
       <div class="hero-ctas" style="margin-top: 2rem;">
         <a href="#projects" class="btn btn-primary">View projects</a>
@@ -1174,10 +1172,7 @@
           <span class="project-badge">In progress</span>
           <span class="project-date">Apr 2026 – present</span>
           <h3 class="project-title">Formula 1 Hub</h3>
-          <p class="project-desc">
-            Dynamic Formula 1 website with an interactive race calendar, standings table,
-            real-time tracking and a design inspired by the official F1 aesthetic.
-          </p>
+          <p class="project-desc">Dynamic Formula 1 website with an interactive race calendar, standings table, real-time tracking and a design inspired by the official F1 aesthetic.</p>
           <div class="project-tech">
             <span class="tech-pill">HTML</span>
             <span class="tech-pill">CSS</span>
@@ -1195,23 +1190,29 @@
         </div>
       </div>
 
-      <!-- Placeholder for future projects -->
+      <!-- EcoLuz — in progress -->
       <div class="project-card reveal">
-        <div class="project-thumb placeholder">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        <div class="project-thumb featured-bg">
+          <img src="ecoluz-bg.webp" class="project-bg">
+          <img src="ecoluz-logo.webp" class="project-logo">
+          <div class="project-stripe"></div>
         </div>
         <div class="project-body">
-          <span class="project-badge" style="background: var(--gray-100); color: var(--gray-600); border: none;">In progress</span>
-          <span class="project-date">Coming soon</span>
-          <h3 class="project-title">Next project</h3>
-          <p class="project-desc">
-            There's always something new in the works. Follow my GitHub to find out when the next one drops.
-          </p>
+          <span class="project-badge">Temporarily paused</span>
+          <span class="project-date">Nov 2025 – Dec 2025</span>
+          <h3 class="project-title">EcoLuz</h3>
+          <p class="project-desc">Sustainable solar lighting e-commerce site with product catalog, information pages and contact form.</p>
+          <div class="project-tech">
+            <span class="tech-pill">HTML</span>
+            <span class="tech-pill">CSS</span>
+            <span class="tech-pill">GitHub Pages</span>
+          </div>
           <div class="project-links">
-            <a href="https://github.com/benipach" target="_blank" rel="noopener" class="project-link">
-              View GitHub
+            <a href="https://benipach.github.io/Ecoluz" target="_blank" rel="noopener" class="project-link primary">
+              View site
               <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
             </a>
+            <a href="https://github.com/benipach/Ecoluz" class="project-link secondary">Repository</a>
           </div>
         </div>
       </div>
