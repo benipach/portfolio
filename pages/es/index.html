@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benicio Pacheco — Desarrollador Web</title>
+  <link rel="icon" href="../../img/icon.webp" type="image/webp">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <script src="../../js/main.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">beni{pach}</a>
+    <ul>
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="lang-switcher" id="lang-switcher" aria-label="Cambiar idioma">
+      <span class="lang-opt" data-lang="en">EN</span>
+      <span class="lang-divider">|</span>
+      <span class="lang-opt" data-lang="es">ES</span>
+    </button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <a href="#sobre-mi">Sobre mí</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-scroll-container">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Desarrollador web en formación</div>
+      <h1></h1>
+      <p class="hero-desc">
+        Tengo 18 años y estoy construyendo mi camino como desarrollador desde la escuela técnica.
+        Me apasiona crear cosas que funcionen bien y se vean mejor.
+      </p>
+
+      <div class="race-bar-label">Progreso en el camino</div>
+      <div class="race-bar-container">
+        <div class="race-bar-fill"></div>
+      </div>
+      <div class="race-bar-pct"><span>90%</span> del secundario técnico completado</div>
+
+      <div class="hero-ctas" style="margin-top: 2rem;">
+        <a href="#proyectos" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contacto" class="btn btn-secondary">Contacto</a>
+        <a href="https://github.com/benipach" target="_blank" rel="noopener" class="btn btn-secondary">
+          GitHub
+          <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="sobre-mi">
+    <div class="section-label">Sobre mí</div>
+    <h2 class="section-title">Quién soy y en qué estoy trabajando</h2>
+    <p class="section-sub">Un poco de contexto sobre mi recorrido y lo que sé hacer.</p>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I’m Benicio Pacheco, 18 years old, based in Buenos Aires, Argentina. I’m studying at a technical school
+          where I specialize in web development. Since I started learning to code I’ve been hooked — there’s something
+          really satisfying about writing code and seeing something work in the browser.
+        </p>
+        <p>
+          I combine my formal schoolwork with personal projects where I put everything I learn into practice.
+          My most ambitious project so far is a Formula 1 hub I built from scratch. I’m actively looking for
+          my first professional opportunity — internship, junior role, or collaboration — where I can keep growing
+          and contribute from day one.
+        </p>
+        <p>
+          I’m a fast learner, I adapt quickly to new environments and tools, and I communicate clearly.
+          I enjoy working in a team as much as working independently, and I always aim for code that is
+          clean, readable, and well-structured.
+        </p>
+
+        <div class="timeline">
+
+          <!-- Education -->
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <img src="../../img/logos/et35-logo.webp" alt="ET 35">
+            </div>
+            <div class="timeline-content">
+              <h3>Technical School N° 35 “Ingeniero Eduardo Latzina”</h3>
+              <h4>Título: Técnico en computación</h4>
+              <span class="timeline-date">2021 – en curso · Buenos Aires, Argentina</span>
+              <p class="timeline-desc">Formación técnica en computación: desarrollo web (HTML, CSS, JavaScript), POO (C/Java), armado y mantenimiento de PCs y servidores, instalación de sistemas operativos y bases de datos SQL.</p>
+            </div>
+          </div>
+
+          <!-- Professional practice -->
+          <div class="timeline-item">
+            <div class="timeline-logo">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gray-600)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+            </div>
+            <div class="timeline-content">
+              <h3>Práctica Profesionalizante — ET N° 35</h3>
+              <h4>Técnico en Hardware (Programa Escolar)</h4>
+              <span class="timeline-date">2023 – 2026 · Buenos Aires, Argentina</span>
+              <p class="timeline-desc">Hands-on practice through the school’s professionalizing program: PC and server assembly and maintenance, installation and configuration of operating systems for both desktops and servers.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="skills-grid reveal">
+      
+        <div class="skill-category">
+          <div class="skill-category-label">Lenguajes</div>
+          <div class="skill-tags">
+            <span class="tag">Java</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Python</span>
+            <span class="tag">C#</span>
+            <span class="tag">SQL</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+          </div>
+        </div>
+      
+        <div class="skill-category">
+          <div class="skill-category-label">Bases de datos</div>
+          <div class="skill-tags">
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">SQL Server</span>
+          </div>
+        </div>
+      
+        <div class="skill-category">
+          <div class="skill-category-label">Herramientas</div>
+          <div class="skill-tags">
+            <span class="tag">Git</span>
+            <span class="tag">GitHub</span>
+            <span class="tag">GitLab</span>
+            <span class="tag">Postman</span>
+            <span class="tag">npm</span>
+            <span class="tag">GitHub Pages</span>
+          </div>
+        </div>
+      
+        <div class="skill-category">
+          <div class="skill-category-label">Editores e IDEs</div>
+          <div class="skill-tags">
+            <span class="tag">Visual Studio Code</span>
+            <span class="tag">Eclipse</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-category-label">Idiomas</div>
+          <div class="skill-tags">
+            <span class="tag highlight">Español — Nativo</span>
+            <span class="tag highlight">Inglés — C1</span>
+          </div>
+        </div>
+      
+        <div class="skill-category">
+          <div class="skill-category-label">Habilidades blandas</div>
+          <div class="skill-tags">
+            <span class="tag">Pensamiento crítico</span>
+            <span class="tag">Comunicación</span>
+            <span class="tag">Trabajo en equipo</span>
+            <span class="tag">Adaptabilidad</span>
+            <span class="tag">Aprendizaje rápido</span>
+            <span class="tag">Atención al detalle</span>
+          </div>
+        </div>
+      
+        <div class="skill-category">
+          <div class="skill-category-label">Aprendiendo</div>
+          <div class="skill-tags">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">REST APIs</span>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="proyectos">
+    <div class="section-label">Proyectos</div>
+    <h2 class="section-title">Lo que estoy construyendo</h2>
+    <p class="section-sub">Proyectos propios donde aplico y expando lo que aprendo día a día.</p>
+
+    <div class="projects-grid">
+
+      <!-- F1 Hub — in progress -->
+      <div class="project-card reveal">
+        <div class="project-thumb featured-bg">
+          <img src="../../img/projects/f1hub-bg.webp" class="project-bg">
+          <img src="../../img/projects/f1hub-logo.webp" class="project-logo">
+          <div class="project-stripe"></div>
+        </div>
+        <div class="project-body">
+          <span class="project-badge">En progreso</span>
+          <span class="project-date">Abr 2026 – actualidad</span>
+          <h3 class="project-title">Formula 1 Hub</h3>
+          <p class="project-desc">Sitio web dinámico sobre Fórmula 1 con calendario interactivo de carreras, tabla de posiciones, seguimiento en tiempo real y diseño inspirado en la estética oficial de la F1.</p>
+          <div class="project-tech">
+            <span class="tech-pill">HTML</span>
+            <span class="tech-pill">CSS</span>
+            <span class="tech-pill">JavaScript</span>
+            <span class="tech-pill">REST API</span>
+            <span class="tech-pill">GitHub Pages</span>
+          </div>
+          <div class="project-links">
+            <a href="https://benipach.github.io/f1-hub-project" target="_blank" rel="noopener" class="project-link primary">
+              Ver sitio
+              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+            </a>
+            <a href="https://github.com/benipach/f1-hub-project" class="project-link secondary">Repositorio</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- EcoLuz — in progress -->
+      <div class="project-card reveal">
+        <div class="project-thumb featured-bg">
+          <img src="../../img/projects/ecoluz-bg.webp" class="project-bg">
+          <img src="../../img/projects/ecoluz-logo.webp" class="project-logo">
+          <div class="project-stripe"></div>
+        </div>
+        <div class="project-body">
+          <span class="project-badge">Pausado temporalmente</span>
+          <span class="project-date">Nov 2025 – Dec 2025</span>
+          <h3 class="project-title">EcoLuz</h3>
+          <p class="project-desc">Sitio de e-commerce de iluminación solar sostenible con catálogo de productos, páginas informativas y formulario de contacto.</p>
+          <div class="project-tech">
+            <span class="tech-pill">HTML</span>
+            <span class="tech-pill">CSS</span>
+            <span class="tech-pill">GitHub Pages</span>
+          </div>
+          <div class="project-links">
+            <a href="https://benipach.github.io/Ecoluz" target="_blank" rel="noopener" class="project-link primary">
+              Ver sitio
+              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+            </a>
+            <a href="https://github.com/benipach/Ecoluz" class="project-link secondary">Repositorio</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contacto">
+    <div class="section-label">Contacto</div>
+    <h2 class="section-title">Hablemos</h2>
+    <p class="section-sub">Siempre abierto a oportunidades, colaboraciones o simplemente charlar sobre código.</p>
+
+    <div class="contact-inner reveal">
+      <div class="contact-links">
+        <a href="https://github.com/benipach" target="_blank" rel="noopener" class="contact-item">
+          <div class="contact-item-left">
+            <div class="contact-icon">
+              <img src="../../img/logos/github-logo.webp" alt="GitHub">
+            </div>
+            <div>
+              <div class="contact-item-label">GitHub</div>
+              <div class="contact-item-value">github.com/benipach</div>
+            </div>
+          </div>
+          <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+
+        <a href="https://linkedin.com/in/benicio-pacheco" target="_blank" rel="noopener" class="contact-item">
+          <div class="contact-item-left">
+            <div class="contact-icon">
+              <img src="../../img/logos/linkedin-logo.webp" alt="LinkedIn">
+            </div>
+            <div>
+              <div class="contact-item-label">LinkedIn</div>
+              <div class="contact-item-value">linkedin.com/in/benicio-pacheco</div>
+            </div>
+          </div>
+          <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+
+        <a href="mailto:pacheco.benicio@gmail.com" class="contact-item">
+          <div class="contact-item-left">
+            <div class="contact-icon">
+              <img src="../../img/logos/email-logo.webp" alt="Email">
+            </div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value">pacheco.benicio@gmail.com</div>
+            </div>
+          </div>
+          <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Benicio Pacheco</span>
+    <span>Hecho con HTML, CSS y ganas.</span>
+  </footer>
+
+</body>
+</html>
