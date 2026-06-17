@@ -799,16 +799,95 @@
       50%       { opacity: 0; }
     }
 
-    /* SCROLL REVEAL */
-    .reveal {
+    /* ── SCROLL REVEAL SYSTEM ── */
+    .reveal,
+    .reveal-left,
+    .reveal-right,
+    .reveal-scale {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .reveal.visible {
+    .reveal         { transform: translateY(28px); }
+    .reveal-left    { transform: translateX(-48px); }
+    .reveal-right   { transform: translateX(48px); }
+    .reveal-scale   { transform: scale(0.93) translateY(16px); }
+
+    .reveal.visible,
+    .reveal-left.visible,
+    .reveal-right.visible,
+    .reveal-scale.visible {
       opacity: 1;
       transform: none;
+    }
+
+    /* staggered children */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(18px) scale(0.97);
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-stagger.visible > *:nth-child(1)  { transition-delay: 0.04s; }
+    .reveal-stagger.visible > *:nth-child(2)  { transition-delay: 0.10s; }
+    .reveal-stagger.visible > *:nth-child(3)  { transition-delay: 0.16s; }
+    .reveal-stagger.visible > *:nth-child(4)  { transition-delay: 0.22s; }
+    .reveal-stagger.visible > *:nth-child(5)  { transition-delay: 0.28s; }
+    .reveal-stagger.visible > *:nth-child(6)  { transition-delay: 0.34s; }
+    .reveal-stagger.visible > *:nth-child(7)  { transition-delay: 0.40s; }
+    .reveal-stagger.visible > *:nth-child(8)  { transition-delay: 0.46s; }
+    .reveal-stagger.visible > * { opacity: 1; transform: none; }
+
+    /* timeline items: slide-up con delay incremental */
+    .timeline-item {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .timeline-item.visible                     { opacity: 1; transform: none; }
+    .timeline-item:nth-child(2).visible        { transition-delay: 0.18s; }
+    .timeline-item:nth-child(3).visible        { transition-delay: 0.32s; }
+
+    /* contact items: sin animación de entrada — el hover requiere transición limpia */
+
+    /* nav: slide desde arriba al cargar */
+    @keyframes navSlideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    nav { animation: navSlideDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+    /* hero CTAs: staggered fade-up */
+    .hero-ctas .btn {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: heroCtaIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero-ctas .btn:nth-child(1) { animation-delay: 1.6s; }
+    .hero-ctas .btn:nth-child(2) { animation-delay: 1.75s; }
+    .hero-ctas .btn:nth-child(3) { animation-delay: 1.9s; }
+
+    @keyframes heroCtaIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* race bar label + pct: fade después de la barra */
+    .race-bar-label,
+    .race-bar-pct {
+      opacity: 0;
+      animation: fadeSoft 0.6s ease 0.5s forwards;
+    }
+
+    @keyframes fadeSoft {
+      to { opacity: 1; }
+    }
+
+    /* footer: fade in al cargar */
+    footer {
+      opacity: 0;
+      animation: fadeSoft 0.8s ease 0.3s forwards;
     }
 
     /* HAMBURGER */
@@ -1027,7 +1106,7 @@
     <p class="section-sub">A bit of context about my background and what I can do.</p>
 
     <div class="about-grid">
-      <div class="about-text reveal">
+      <div class="about-text reveal-left">
         <p>
           I’m Benicio Pacheco, 18 years old, based in Buenos Aires, Argentina. I’m studying at a technical school
           where I specialize in web development. Since I started learning to code I’ve been hooked — there’s something
@@ -1076,7 +1155,7 @@
         </div>
       </div>
 
-      <div class="skills-grid reveal">
+      <div class="skills-grid reveal-right reveal-stagger">
       
         <div class="skill-category">
           <div class="skill-category-label">Programming Languages</div>
@@ -1159,10 +1238,10 @@
     <h2 class="section-title">What I'm building</h2>
     <p class="section-sub">Personal projects where I apply and expand what I learn every day.</p>
 
-    <div class="projects-grid">
+    <div class="projects-grid reveal-stagger">
 
       <!-- F1 Hub — in progress -->
-      <div class="project-card reveal">
+      <div class="project-card">
         <div class="project-thumb featured-bg">
           <img src="./img/projects/f1hub-bg.webp" class="project-bg">
           <img src="./img/projects/f1hub-logo.webp" class="project-logo">
@@ -1191,7 +1270,7 @@
       </div>
 
       <!-- EcoLuz — in progress -->
-      <div class="project-card reveal">
+      <div class="project-card">
         <div class="project-thumb featured-bg">
           <img src="./img/projects/ecoluz-bg.webp" class="project-bg">
           <img src="./img/projects/ecoluz-logo.webp" class="project-logo">
@@ -1272,7 +1351,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <span>© 2025 Benicio Pacheco</span>
+    <span>© 2026 Benicio Pacheco</span>
     <span>Built with HTML, CSS, and passion.</span>
   </footer>
 
@@ -1304,13 +1383,19 @@
       tick();
     }
 
-    /* ── Scroll reveal (cards, blocks) ── */
+    /* ── Scroll reveal (all variants) ── */
     var revealObs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
-        if (e.isIntersecting) e.target.classList.add('visible');
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
       });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(function(el) { revealObs.observe(el); });
+
+    document.querySelectorAll(
+      '.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-stagger, .timeline-item'
+    ).forEach(function(el) { revealObs.observe(el); });
 
     /* ── Typewriter for section headings (scroll-triggered) ── */
     function speedFor(el) {
@@ -1363,7 +1448,7 @@
           return;
         }
         var progress = Math.min(scrolled / range, 1);
-        heroInner.style.transform = 'translateX(' + (-progress * 110) + '%)';
+        heroInner.style.transform = 'translateX(' + (progress * 110) + '%)';
         heroInner.style.opacity   = String(Math.max(0, 1 - progress * 2.2));
       }
 
