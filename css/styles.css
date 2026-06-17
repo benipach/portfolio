@@ -99,7 +99,6 @@ nav ul a {
 
 nav ul a:hover { color: var(--black); }
 
-/* LANG SWITCHER */
 .lang-switcher {
   display: flex;
   align-items: center;
@@ -114,18 +113,24 @@ nav ul a:hover { color: var(--black); }
   font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--gray-600);
+  text-decoration: none; /* NUEVO */
   transition: border-color 0.2s, background 0.2s;
   margin-right: 0.75rem;
+}
+
+.lang-switcher:visited {
+  color: var(--gray-600);
 }
 
 .lang-switcher:hover {
   border-color: var(--red);
   background: var(--red-light);
+  text-decoration: none;
 }
 
-.lang-opt { transition: color 0.2s; }
-.lang-opt.active { color: var(--red); }
-.lang-divider { color: var(--gray-300); user-select: none; }
+.lang-switcher:hover .lang-opt {
+  color: var(--red);
+}
 
 /* HERO */
 .hero-scroll-container {
@@ -313,8 +318,18 @@ section {
     align-items: start;
 }
 
+#sobre-mi .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+
 @media (max-width: 680px) {
     #about .about-grid { grid-template-columns: 1fr; }
+    #sobre-mi .about-grid { grid-template-columns: 1fr; }
+
 }
 
 .about-text p {
@@ -467,6 +482,13 @@ section {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
 }
+
+#proyectos .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
 
 .project-card {
     border: 1px solid var(--gray-300);
@@ -921,6 +943,11 @@ footer a:hover { color: var(--black); }
         grid-template-columns: 1fr;
         gap: 2.5rem;
     }
+    
+    #sobre-mi .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
 
     .skills-grid {
         display: grid;
@@ -946,6 +973,10 @@ footer a:hover { color: var(--black); }
     }
 
     #projects .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #proyectos .projects-grid {
         grid-template-columns: 1fr;
     }
 
