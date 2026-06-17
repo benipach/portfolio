@@ -92,29 +92,6 @@ setTimeout(function() { typeText(desc, descText, 11, null); }, 1000);
     onScroll();
 })();
 
-/* ── Language switcher ── */
-(function () {
-  var btn = document.getElementById('lang-switcher');
-  if (!btn) return;
-
-  // Detect current lang from pathname: /en/... or /es/...
-  function currentLang() {
-    return /\/es\//i.test(window.location.pathname) ? 'es' : 'en';
-  }
-
-  // Mark active option
-  var lang = currentLang();
-  btn.querySelectorAll('.lang-opt').forEach(function (el) {
-    el.classList.toggle('active', el.dataset.lang === lang);
-  });
-
-  btn.addEventListener('click', function () {
-    var next = currentLang() === 'en' ? 'es' : 'en';
-    // Navigate to sibling folder preserving hash
-    window.location.href = '../' + next + '/index.html' + window.location.hash;
-  });
-})();
-
 /* ── Hamburger menu ── */
 (function() {
     var btn  = document.getElementById('nav-hamburger');
