@@ -1,0 +1,126 @@
+/* ════════════════════════════════════════════════
+   Global color transition (dark/light switch)
+   ════════════════════════════════════════════════ */
+*, *::before, *::after {
+  transition:
+    background-color 0.3s ease,
+    border-color     0.3s ease,
+    color            0.3s ease,
+    box-shadow       0.3s ease;
+}
+
+/* Opt-out elements where transition looks odd */
+.race-bar-fill,
+.reveal,
+.hero-inner,
+nav,
+.nav-mobile-menu {
+  transition:
+    background-color 0.3s ease,
+    border-color     0.3s ease,
+    color            0.3s ease,
+    box-shadow       0.3s ease,
+    /* keep their own existing transitions */
+    transform        var(--t, 0.25s) ease,
+    opacity          var(--t, 0.25s) ease,
+    flex             0.5s cubic-bezier(0.25, 0.46, 0.45, 1);
+}
+
+/* ════════════════════════════════════════════════
+   Theme toggle button
+   ════════════════════════════════════════════════ */
+.theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--terracotta);
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.theme-toggle::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border-radius: 7px;
+  background: var(--clay-light);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 0;
+}
+
+.theme-toggle:hover::before {
+  opacity: 1;
+}
+
+.theme-toggle:hover {
+  color: var(--clay);
+}
+
+/* Show icon for the CURRENT mode; on hover, crossfade to the mode you'll switch to */
+.theme-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.theme-icon--sun {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+
+.theme-icon--moon {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0.4);
+}
+
+.theme-toggle:hover .theme-icon--sun {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-45deg) scale(0.4);
+}
+
+.theme-toggle:hover .theme-icon--moon {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+
+html.dark .theme-icon--sun {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0.4);
+}
+
+html.dark .theme-icon--moon {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+
+html.dark .theme-toggle:hover .theme-icon--sun {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+
+html.dark .theme-toggle:hover .theme-icon--moon {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-45deg) scale(0.4);
+}
+
+/* Mobile: also show the button (it's already in nav) */
+@media (max-width: 500px) {
+  .theme-toggle {
+    width: 28px;
+    height: 28px;
+  }
+}
