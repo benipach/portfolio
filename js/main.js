@@ -1,3 +1,4 @@
+document.documentElement.classList.add('js');
 /* ════════════════════════════════════════════════
    i18n — Language switching (no page reload)
    ════════════════════════════════════════════════ */
@@ -130,110 +131,25 @@ function setId(selector, newId) {
 
 
 /* ════════════════════════════════════════════════
-   Helper: strip whitespace
-   ════════════════════════════════════════════════ */
-function getCleanText(el) {
-  return el.textContent.replace(/\s+/g, ' ').trim();
-}
-
-
-/* ════════════════════════════════════════════════
-   Typewriter
-   ════════════════════════════════════════════════ */
-function typeText(el, text, speed, onDone) {
-  el.innerHTML = '';
-  var cursor = document.createElement('span');
-  cursor.className = 'tw-cursor';
-  el.appendChild(cursor);
-  var i = 0;
-  function tick() {
-    if (i >= text.length) {
-      if (onDone) { cursor.remove(); onDone(); }
-      else { setTimeout(function() { cursor.remove(); }, 1200); }
-      return;
-    }
-    var ch = text[i++];
-    ch === '\n'
-      ? cursor.insertAdjacentHTML('beforebegin', '<br>')
-      : cursor.insertAdjacentText('beforebegin', ch);
-    setTimeout(tick, speed);
-  }
-  tick();
-}
-
-
-/* ════════════════════════════════════════════════
-   Scroll reveal
-   ════════════════════════════════════════════════ */
-var revealObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(function(el) { revealObs.observe(el); });
-
-
-/* ════════════════════════════════════════════════
-   Section-heading typewriter (scroll-triggered)
-   ════════════════════════════════════════════════ */
-function speedFor(el) {
-  if (el.classList.contains('section-title')) return 35;
-  if (el.classList.contains('section-label')) return 22;
-  return 10;
-}
-
-var twObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting && !e.target.dataset.twDone) {
-      e.target.dataset.twDone = '1';
-      typeText(e.target, e.target.dataset.twText, speedFor(e.target), null);
-      twObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.section-label, .section-title, .section-sub').forEach(function(el) {
-  el.dataset.twText = getCleanText(el);
-  el.innerHTML = '';
-  twObs.observe(el);
-});
-
-
-/* ════════════════════════════════════════════════
-   Hero typewriter (staggered on load)
-   ════════════════════════════════════════════════ */
-var eyebrow = document.querySelector('.hero-eyebrow');
-var h1      = document.querySelector('h1');
-var desc    = document.querySelector('.hero-desc');
-
-var eyebrowText = getCleanText(eyebrow);
-var descText    = getCleanText(desc);
-eyebrow.innerHTML = '';
-desc.innerHTML    = '';
-
-setTimeout(function() { typeText(eyebrow, eyebrowText, 11, null); }, 1500);
-setTimeout(function() { typeText(h1, 'Benicio\nPacheco.', 55, null); }, 250);
-setTimeout(function() { typeText(desc, descText, 11, null); }, 1000);
-
-
-/* ════════════════════════════════════════════════
-   Hero exit: slides left on scroll
+   Hero exit: slides right on scroll (sticky)
    ════════════════════════════════════════════════ */
 (function() {
   var heroInner     = document.querySelector('.hero-inner');
   var heroContainer = document.querySelector('.hero-scroll-container');
+  if (!heroInner || !heroContainer) return;
 
   function onScroll() {
     var scrolled = window.scrollY;
-    var range    = heroContainer.offsetHeight - window.innerHeight;
+    /* runway = espacio sticky disponible: container - viewport */
+    var range = heroContainer.offsetHeight - window.innerHeight;
     if (scrolled <= 0) {
       heroInner.style.transform = '';
       heroInner.style.opacity   = '';
       return;
     }
     var progress = Math.min(scrolled / range, 1);
-    heroInner.style.transform = 'translateX(' + (progress * 110) + '%)';
-    heroInner.style.opacity   = String(Math.max(0, 1 - progress * 2.2));
+    heroInner.style.transform = 'translateX(' + (progress * 210) + '%)';
+    heroInner.style.opacity   = String(Math.max(0, 1 - progress * 2));
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -292,23 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (lang === currentLang) return;
       applyLang(lang);
 
-      /* Re-trigger typewriter for any heading already typed */
-      document.querySelectorAll('.section-label, .section-title, .section-sub').forEach(function(el) {
-        if (el.dataset.twDone) {
-          el.dataset.twText  = getCleanText(el);
-          el.dataset.twDone  = '';
-          el.innerHTML       = '';
-          /* Re-observe so it fires on next intersection */
-          twObs.observe(el);
-          /* If already in viewport, fire immediately */
-          var rect = el.getBoundingClientRect();
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            el.dataset.twDone = '1';
-            typeText(el, el.dataset.twText, speedFor(el), null);
-            twObs.unobserve(el);
-          }
-        }
-      });
     });
   });
 });
@@ -343,4 +242,52 @@ document.addEventListener('DOMContentLoaded', function() {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
     if (!localStorage.getItem('theme')) applyTheme(e.matches, false);
   });
+})();
+
+/* ════════════════════════════════════════════════
+   Scroll reveal — refined entrance animations
+   ════════════════════════════════════════════════ */
+(function() {
+  function setDelay(selector, step, maxDelay) {
+    document.querySelectorAll(selector).forEach(function(el, index) {
+      var delay = Math.min(index * step, maxDelay);
+      el.style.setProperty('--reveal-delay', delay + 'ms');
+    });
+  }
+
+  function initScrollReveal() {
+    var revealEls = Array.from(document.querySelectorAll('.reveal'));
+    if (!revealEls.length) return;
+
+    setDelay('.section-about > .reveal', 80, 220);
+    setDelay('.section-projects > .reveal', 80, 220);
+    setDelay('.section-contact > .reveal', 80, 220);
+    setDelay('.timeline .timeline-item.reveal', 120, 260);
+    setDelay('.skills-grid .skill-category.reveal', 65, 420);
+    setDelay('.projects-grid .project-card.reveal', 120, 240);
+    setDelay('.contact-links .contact-item.reveal', 90, 220);
+    setDelay('footer .reveal', 80, 160);
+
+    if (!('IntersectionObserver' in window)) {
+      revealEls.forEach(function(el) { el.classList.add('is-visible'); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0.16,
+      rootMargin: '0px 0px -10% 0px'
+    });
+
+    revealEls.forEach(function(el) {
+      observer.observe(el);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initScrollReveal);
 })();
