@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Benicio Pacheco — Desarrollador Web</title>
+  <title>Benicio Pacheco — Web Developer</title>
   <link rel="icon" href="img/icon.webp" type="image/webp">
   <script>
     document.documentElement.classList.add('js');
     (function() {
       var saved = localStorage.getItem('theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
+
+      // Default: light mode.
+      // Only enable dark mode if the user explicitly chose it.
+      if (saved === 'dark') {
         document.documentElement.classList.add('dark');
       }
     })();
@@ -35,9 +37,9 @@
     <div class="nav-actions">
       <div class="nav-controls">
         <div class="lang-switcher" aria-label="Switch language">
-          <span class="lang-opt" data-lang="en">EN</span>
+          <span class="lang-opt active" data-lang="en">EN</span>
           <span class="lang-divider" aria-hidden="true"></span>
-          <span class="lang-opt active" data-lang="es">ES</span>
+          <span class="lang-opt" data-lang="es">ES</span>
         </div>
         <span class="nav-controls-divider" aria-hidden="true"></span>
         <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
