@@ -6,6 +6,7 @@
   <title>Benicio Pacheco — Desarrollador Web</title>
   <link rel="icon" href="img/icon.webp" type="image/webp">
   <script>
+    document.documentElement.classList.add('js');
     (function() {
       var saved = localStorage.getItem('theme');
       var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -70,7 +71,7 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-eyebrow">Desarrollador web en formación</div>
-      <h1></h1>
+      <h1>Benicio<br>Pacheco.</h1>
       <p class="hero-desc">
         Tengo 18 años y estoy construyendo mi camino como desarrollador desde la escuela técnica.
         Me apasiona crear cosas que funcionen bien y se vean mejor.
@@ -92,16 +93,16 @@
       </div>
     </div>
   </section>
-  </div>
+  </div><!-- /hero-scroll-container -->
 
   <!-- ABOUT -->
   <section id="sobre-mi" class="section-about">
-    <div class="section-label">Sobre mí</div>
-    <h2 class="section-title">Quién soy y en qué estoy trabajando</h2>
-    <p class="section-sub">Un poco de contexto sobre mi recorrido y lo que sé hacer.</p>
+    <div class="section-label reveal" data-reveal="eyebrow">Sobre mí</div>
+    <h2 class="section-title reveal" data-reveal="title">Quién soy y en qué estoy trabajando</h2>
+    <p class="section-sub reveal" data-reveal="up">Un poco de contexto sobre mi recorrido y lo que sé hacer.</p>
 
     <div class="about-grid">
-      <div class="about-text reveal">
+      <div class="about-text reveal" data-reveal="left">
         <p id="about-p1">Soy Benicio Pacheco, tengo 18 años y vivo en Buenos Aires, Argentina. Estudio en una escuela técnica donde me especializo en desarrollo web. Desde que empecé a aprender a programar, me ha apasionado: hay algo muy gratificante en escribir código y ver cómo funciona en el navegador.</p>
         <p id="about-p2">Combino mis estudios con proyectos personales donde pongo en práctica todo lo que aprendo. Mi proyecto más ambicioso hasta la fecha es un centro de información sobre la Fórmula 1 que construí desde cero. Busco activamente mi primera oportunidad profesional —prácticas, puesto junior o colaboración— donde pueda seguir creciendo y contribuir desde el primer día.</p>
         <p id="about-p3">Aprendo rápido, me adapto con facilidad a nuevos entornos y herramientas, y me comunico con claridad. Disfruto tanto trabajando en equipo como de forma independiente, y siempre busco un código limpio, legible y bien estructurado.</p>
@@ -109,7 +110,7 @@
         <div class="timeline">
 
           <!-- Education -->
-          <div class="timeline-item">
+          <div class="timeline-item reveal" data-reveal="left">
             <div class="timeline-logo">
               <img src="img/logos/et35-logo.webp" alt="ET 35">
             </div>
@@ -122,7 +123,7 @@
           </div>
 
           <!-- Professional practice -->
-          <div class="timeline-item">
+          <div class="timeline-item reveal" data-reveal="left">
             <div class="timeline-logo">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gray-600)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
             </div>
@@ -137,9 +138,9 @@
         </div>
       </div>
 
-      <div class="skills-grid reveal">
+      <div class="skills-grid reveal" data-reveal="right">
       
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-lang-label">Lenguajes</div>
           <div class="skill-tags">
             <span class="tag">Java</span>
@@ -152,7 +153,7 @@
           </div>
         </div>
       
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-db-label">Bases de datos</div>
           <div class="skill-tags">
             <span class="tag">PostgreSQL</span>
@@ -161,7 +162,7 @@
           </div>
         </div>
       
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-tools-label">Herramientas</div>
           <div class="skill-tags">
             <span class="tag">Git</span>
@@ -173,7 +174,7 @@
           </div>
         </div>
       
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-ide-label">Editores e IDEs</div>
           <div class="skill-tags">
             <span class="tag">Visual Studio Code</span>
@@ -181,7 +182,7 @@
           </div>
         </div>
 
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-spoken-label">Idiomas</div>
           <div class="skill-tags">
             <span class="tag highlight" id="spoken-lang-1">Español — Nativo</span>
@@ -189,7 +190,7 @@
           </div>
         </div>
       
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-soft-label">Habilidades blandas</div>
           <div class="skill-tags">
             <span class="tag" id="soft-skill-1">Pensamiento crítico</span>
@@ -201,7 +202,7 @@
           </div>
         </div>
       
-        <div class="skill-category">
+        <div class="skill-category reveal" data-reveal="card">
           <div class="skill-category-label" id="skill-learn-label">Aprendiendo</div>
           <div class="skill-tags">
             <span class="tag">React</span>
@@ -216,14 +217,14 @@
 
   <!-- PROJECTS -->
   <section id="proyectos" class="section-projects">
-    <div class="section-label">Proyectos</div>
-    <h2 class="section-title">Lo que estoy construyendo</h2>
-    <p class="section-sub">Proyectos propios donde aplico y expando lo que aprendo día a día.</p>
+    <div class="section-label reveal" data-reveal="eyebrow">Proyectos</div>
+    <h2 class="section-title reveal" data-reveal="title">Lo que estoy construyendo</h2>
+    <p class="section-sub reveal" data-reveal="up">Proyectos propios donde aplico y expando lo que aprendo día a día.</p>
 
     <div class="projects-grid">
 
       <!-- F1 Hub -->
-      <div class="project-card reveal">
+      <div class="project-card reveal" data-reveal="card">
         <div class="project-thumb featured-bg">
           <img src="img/projects/f1hub-bg.webp" class="project-bg">
           <img src="img/projects/f1hub-logo.webp" class="project-logo">
@@ -252,7 +253,7 @@
       </div>
 
       <!-- EcoLuz -->
-      <div class="project-card reveal">
+      <div class="project-card reveal" data-reveal="card">
         <div class="project-thumb featured-bg">
           <img src="img/projects/ecoluz-bg.webp" class="project-bg">
           <img src="img/projects/ecoluz-logo.webp" class="project-logo">
@@ -283,13 +284,13 @@
 
   <!-- CONTACT -->
   <section id="contacto" class="section-contact">
-    <div class="section-label">Contacto</div>
-    <h2 class="section-title">Hablemos</h2>
-    <p class="section-sub">Siempre abierto a oportunidades, colaboraciones o simplemente charlar sobre código.</p>
+    <div class="section-label reveal" data-reveal="eyebrow">Contacto</div>
+    <h2 class="section-title reveal" data-reveal="title">Hablemos</h2>
+    <p class="section-sub reveal" data-reveal="up">Siempre abierto a oportunidades, colaboraciones o simplemente charlar sobre código.</p>
 
-    <div class="contact-inner reveal">
+    <div class="contact-inner reveal" data-reveal="up">
       <div class="contact-links">
-        <a href="https://github.com/benipach" target="_blank" rel="noopener" class="contact-item">
+        <a href="https://github.com/benipach" target="_blank" rel="noopener" class="contact-item reveal" data-reveal="item">
           <div class="contact-item-left">
             <div class="contact-icon">
               <img src="img/logos/github-logo.webp" alt="GitHub">
@@ -302,7 +303,7 @@
           <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </a>
 
-        <a href="https://linkedin.com/in/benicio-pacheco" target="_blank" rel="noopener" class="contact-item">
+        <a href="https://linkedin.com/in/benicio-pacheco" target="_blank" rel="noopener" class="contact-item reveal" data-reveal="item">
           <div class="contact-item-left">
             <div class="contact-icon">
               <img src="img/logos/linkedin-logo.webp" alt="LinkedIn">
@@ -315,7 +316,7 @@
           <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </a>
 
-        <a href="mailto:pacheco.benicio@gmail.com" class="contact-item">
+        <a href="mailto:pacheco.benicio@gmail.com" class="contact-item reveal" data-reveal="item">
           <div class="contact-item-left">
             <div class="contact-icon">
               <img src="img/logos/email-logo.webp" alt="Email">
@@ -333,8 +334,8 @@
 
   <!-- FOOTER -->
   <footer>
-    <span>© 2026 Benicio Pacheco</span>
-    <span id="footer-right">Hecho con HTML, CSS y ganas.</span>
+    <span class="reveal" data-reveal="up">© 2026 Benicio Pacheco</span>
+    <span id="footer-right" class="reveal" data-reveal="up">Hecho con HTML, CSS y ganas.</span>
   </footer>
 
 </body>
