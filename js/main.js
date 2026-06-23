@@ -3,7 +3,7 @@ document.documentElement.classList.add('js');
    i18n — Language switching (no page reload)
    ════════════════════════════════════════════════ */
 
-var currentLang = localStorage.getItem('lang') || 'es';
+var currentLang = localStorage.getItem('lang') || 'en';
 
 function applyLang(lang) {
   var t = TRANSLATIONS[lang];
@@ -238,10 +238,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  /* Si el usuario cambia el tema del SO y no tiene preferencia guardada, seguirlo */
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-    if (!localStorage.getItem('theme')) applyTheme(e.matches, false);
-  });
+  /* Default theme is light. Do not follow the OS theme automatically.
+     The user's manual choice is still saved when they use the toggle. */
 })();
 
 /* ════════════════════════════════════════════════
