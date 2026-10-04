@@ -59,7 +59,6 @@ function applyLang(lang) {
   /* About section */
   setText('.section-about .section-label', t.aboutLabel);
   setText('.section-about .section-title', t.aboutTitle);
-  setText('.section-about .section-sub',   t.aboutSub);
 
   /* Elements marked with data-i18n="key" (projects, description, background, skills) */
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
