@@ -1124,20 +1124,6 @@ html.dark .theme-icon--moon { display: none; }
 
 .section-contact .section-head { gap: 14px; }
 
-/* It can wrap to two lines on phones; without this it widens the page */
-.contact-chip {
-  justify-self: start;
-  align-items: flex-start;
-  max-width: 100%;
-  white-space: normal;
-  border-radius: 12px;
-}
-
-.contact-chip .status-dot {
-  flex: none;
-  margin-top: 0.45em;
-}
-
 .contact-mail {
   display: grid;
   gap: 16px;
