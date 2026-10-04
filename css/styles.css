@@ -906,14 +906,17 @@ html.dark .theme-icon--moon { display: none; }
   background: var(--soft);
 }
 
-.project-cover img {
+.project-cover img,
+.project-cover video {
+  display: block;
   width: 100%;
-  height: 100%; /* the <img> has height="900": this ties it to the cover's size */
+  height: 100%; /* the <img>/<video> has a height attribute: this ties it to the cover's size */
   object-fit: cover;
   transition: transform 500ms var(--ease-swift);
 }
 
-.project:hover .project-cover img { transform: scale(1.04); }
+.project:hover .project-cover img,
+.project:hover .project-cover video { transform: scale(1.04); }
 
 /* Cover for projects without an image: the name on navy */
 .project-cover--type {

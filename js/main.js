@@ -258,6 +258,26 @@ if (themeBtn) {
 
 
 /* ════════════════════════════════════════════════
+   Project cover videos
+   They play only while on screen, and never with reduced motion:
+   then the poster (the video's first frame) stays as a still image.
+   ════════════════════════════════════════════════ */
+if ('IntersectionObserver' in window) {
+  document.querySelectorAll('.project-cover video').forEach(function(video) {
+    new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting && !reduceMotion.matches) {
+        var playing = video.play();
+        /* If the browser blocks autoplay, the poster just stays */
+        if (playing) playing.catch(function() {});
+      } else {
+        video.pause();
+      }
+    }, { threshold: 0.25 }).observe(video);
+  });
+}
+
+
+/* ════════════════════════════════════════════════
    Hover effects — lines and fills that always finish
    The line under links and the fill of buttons grow from the left
    and leave through the right. If the mouse leaves halfway, the line

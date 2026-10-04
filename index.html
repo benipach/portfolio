@@ -136,10 +136,11 @@
         <h3 class="group-title" data-i18n="projFeatured">Featured</h3>
         <div class="project-list">
 
-          <!-- F1 Hub — TODO: swap the cover for a short GIF/video of the live timing page -->
+          <!-- F1 Hub: the cover is a muted video (built in F:\dev\f1-hub-cover\video with build-cover.ps1).
+               main.js plays it only while it's on screen; with reduced motion the poster (its first frame) stays. -->
           <article class="project">
             <a class="project-cover" href="https://benipach.github.io/f1-hub-project" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-              <img src="img/projects/f1hub-cover.webp" alt="" width="2100" height="900" loading="lazy">
+              <video src="img/projects/f1hub-cover.mp4" poster="img/projects/f1hub-cover.webp" width="1680" height="720" muted loop playsinline preload="none"></video>
             </a>
             <div class="project-body">
               <div class="project-main">
