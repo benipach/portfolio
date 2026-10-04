@@ -3,342 +3,464 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Benicio Pacheco — Web Developer</title>
+  <title>Benicio Pacheco — Software Developer</title>
+  <meta name="description" content="Benicio Pacheco, software developer from Buenos Aires, open to part-time remote work. Projects, background and contact." />
+  <link rel="canonical" href="https://benipach.dev/">
   <link rel="icon" href="img/icon.webp" type="image/webp">
-  <script>
-    document.documentElement.classList.add('js');
-    (function() {
-      var saved = localStorage.getItem('theme');
+  <link rel="icon" href="img/icon-32.png" type="image/png" sizes="32x32">
+  <!-- iPhone/iPad home screen icon: iOS only takes a PNG -->
+  <link rel="apple-touch-icon" href="img/icon-180.png">
 
-      // Default: light mode.
-      // Only enable dark mode if the user explicitly chose it.
-      if (saved === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
+  <!-- Link preview when sharing (LinkedIn, WhatsApp, X, Discord...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://benipach.dev/">
+  <meta property="og:title" content="Benicio Pacheco — Software Developer">
+  <meta property="og:description" content="Software developer from Buenos Aires, open to part-time remote work. Projects, background and contact.">
+  <meta property="og:site_name" content="Benicio Pacheco">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_AR">
+  <!-- JPG instead of WebP: LinkedIn doesn't reliably show WebP previews. 1200x630 is the size every network expects. -->
+  <meta property="og:image" content="https://benipach.dev/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="F1 Hub's live timing page: the qualifying classification, track map and race control messages.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script>
+    (function() {
+      var root = document.documentElement;
+      try {
+        // Default: light mode. Only enable dark mode if the user explicitly chose it.
+        if (localStorage.getItem('theme') === 'dark') {
+          root.classList.add('dark');
+        }
+        // The HTML is in English. If the visitor chose Spanish, hide the page until
+        // main.js translates it, so the English text doesn't flash first.
+        // (Safety net: show it anyway after a moment, in case main.js fails to load.)
+        if (localStorage.getItem('lang') === 'es') {
+          root.lang = 'es';
+          root.classList.add('i18n-pending');
+          setTimeout(function() { root.classList.remove('i18n-pending'); }, 1500);
+        }
+      } catch (e) {}
     })();
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Chivo+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/translations.js"></script>
   <script src="js/main.js" defer></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">beni{pach}</a>
-    <ul>
-      <li><a href="#sobre-mi" id="nav-link-about">Sobre mí</a></li>
-      <li><a href="#proyectos" id="nav-link-projects">Proyectos</a></li>
-      <li><a href="#contacto" id="nav-link-contact">Contacto</a></li>
-    </ul>
-    <div class="nav-actions">
-      <div class="nav-controls">
-        <div class="lang-switcher" aria-label="Switch language">
-          <span class="lang-opt active" data-lang="en">EN</span>
-          <span class="lang-divider" aria-hidden="true"></span>
-          <span class="lang-opt" data-lang="es">ES</span>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main">
+      <a href="#" class="nav-logo">benipach</a>
+      <ul class="nav-links">
+        <li><a href="#projects" id="nav-link-projects">Projects</a></li>
+        <li><a href="#about" id="nav-link-about">About</a></li>
+        <li><a href="#contact" id="nav-link-contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="lang-switcher" role="group" aria-label="Language">
+          <button type="button" class="lang-opt active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" class="lang-opt" data-lang="es" aria-pressed="false">ES</button>
         </div>
-        <span class="nav-controls-divider" aria-hidden="true"></span>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
-          <!-- Sun icon -->
-          <svg class="theme-icon theme-icon--sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button type="button" class="icon-btn theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">
+          <!-- Moon: shown in light mode -->
+          <svg class="theme-icon theme-icon--moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <!-- Sun: shown in dark mode -->
+          <svg class="theme-icon theme-icon--sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
             <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
             <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
           </svg>
-          <!-- Moon icon -->
-          <svg class="theme-icon theme-icon--moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
+        </button>
+        <button type="button" class="icon-btn nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-mobile-menu">
+          <span></span><span></span><span></span>
         </button>
       </div>
-      <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú">
-        <span></span><span></span><span></span>
-      </button>
+    </nav>
+
+    <div class="nav-mobile-menu" id="nav-mobile-menu" hidden>
+      <a href="#projects" id="mobile-link-projects">Projects</a>
+      <a href="#about" id="mobile-link-about">About</a>
+      <a href="#contact" id="mobile-link-contact">Contact</a>
     </div>
-  </nav>
+  </header>
 
-  <div class="nav-mobile-menu" id="nav-mobile-menu">
-    <a href="#sobre-mi" id="mobile-link-about">Sobre mí</a>
-    <a href="#proyectos" id="mobile-link-projects">Proyectos</a>
-    <a href="#contacto" id="mobile-link-contact">Contacto</a>
-  </div>
+  <main>
 
-  <!-- HERO -->
-  <div class="hero-scroll-container">
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-eyebrow">Desarrollador web en formación</div>
-      <h1>Benicio<br>Pacheco.</h1>
-      <p class="hero-desc">
-        Tengo 18 años y estoy construyendo mi camino como desarrollador desde la escuela técnica.
-        Me apasiona crear cosas que funcionen bien y se vean mejor.
-      </p>
-
-      <div class="race-bar-label">Progreso en el camino</div>
-      <div class="race-bar-container">
-        <div class="race-bar-fill"></div>
-      </div>
-      <div class="race-bar-pct"><span>90%</span> <span class="race-bar-pct-text">del secundario técnico completado</span></div>
-
-      <div class="hero-ctas" style="margin-top: 2rem;">
-        <a href="#proyectos" class="btn btn-primary hero-cta-1">Ver proyectos</a>
-        <a href="#contacto" class="btn btn-secondary hero-cta-2">Contacto</a>
-        <a href="https://github.com/benipach" target="_blank" rel="noopener" class="btn btn-secondary">
-          GitHub
-          <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-  </div><!-- /hero-scroll-container -->
-
-  <!-- ABOUT -->
-  <section id="sobre-mi" class="section-about">
-    <div class="section-label reveal" data-reveal="eyebrow">Sobre mí</div>
-    <h2 class="section-title reveal" data-reveal="title">Quién soy y en qué estoy trabajando</h2>
-    <p class="section-sub reveal" data-reveal="up">Un poco de contexto sobre mi recorrido y lo que sé hacer.</p>
-
-    <div class="about-grid">
-      <div class="about-text reveal" data-reveal="left">
-        <p id="about-p1">Soy Benicio Pacheco, tengo 18 años y vivo en Buenos Aires, Argentina. Estudio en una escuela técnica donde me especializo en desarrollo web. Desde que empecé a aprender a programar, me ha apasionado: hay algo muy gratificante en escribir código y ver cómo funciona en el navegador.</p>
-        <p id="about-p2">Combino mis estudios con proyectos personales donde pongo en práctica todo lo que aprendo. Mi proyecto más ambicioso hasta la fecha es un centro de información sobre la Fórmula 1 que construí desde cero. Busco activamente mi primera oportunidad profesional —prácticas, puesto junior o colaboración— donde pueda seguir creciendo y contribuir desde el primer día.</p>
-        <p id="about-p3">Aprendo rápido, me adapto con facilidad a nuevos entornos y herramientas, y me comunico con claridad. Disfruto tanto trabajando en equipo como de forma independiente, y siempre busco un código limpio, legible y bien estructurado.</p>
-
-        <div class="timeline">
-
-          <!-- Education -->
-          <div class="timeline-item reveal" data-reveal="left">
-            <div class="timeline-logo">
-              <img src="img/logos/et35-logo.webp" alt="ET 35">
-            </div>
-            <div class="timeline-content">
-              <h3 id="edu1-title">Escuela Técnica N° 35 "Ingeniero Eduardo Latzina"</h3>
-              <h4 id="edu1-degree">Título: Técnico en computación</h4>
-              <span class="timeline-date" id="edu1-date">2021 – en curso · Buenos Aires, Argentina</span>
-              <p class="timeline-desc" id="edu1-desc">Formación técnica en computación: desarrollo web (HTML, CSS, JavaScript), POO (C/Java), armado y mantenimiento de PCs y servidores, instalación de sistemas operativos y bases de datos SQL.</p>
-            </div>
-          </div>
-
-          <!-- Professional practice -->
-          <div class="timeline-item reveal" data-reveal="left">
-            <div class="timeline-logo">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gray-600)"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-            </div>
-            <div class="timeline-content">
-              <h3 id="exp1-title">Práctica Profesionalizante — ET N° 35</h3>
-              <h4 id="exp1-role">Instalación y mantenimiento de hardware de computadoras y servidores</h4>
-              <span class="timeline-date" id="exp1-date">2026 · Buenos Aires, Argentina</span>
-              <p class="timeline-desc" id="exp1-desc">Prácticas a través del programa de profesionalización de la escuela: montaje y mantenimiento de PC y servidores, instalación y configuración de sistemas operativos tanto para ordenadores de sobremesa como para servidores.</p>
-            </div>
-          </div>
-
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="hero-eyebrow">Software developer · Buenos Aires (UTC−3)</p>
+        <h1 class="hero-name">Benicio<br>Pacheco</h1>
+        <p class="hero-desc">I build web apps end to end. My main project, F1 Hub, streams Formula 1's official live timing to the browser in real time.</p>
+        <p class="hero-status">Available for part-time remote work · 20 h/week</p>
+        <div class="hero-ctas">
+          <a href="#projects" class="btn btn-primary hero-cta-1">View projects</a>
+          <a href="#contact" class="btn btn-secondary hero-cta-2">Contact</a>
+          <!-- main.js swaps the label and the PDF with the language: English resume (Letter) or Spanish CV (A4).
+               The PDFs in cv/ are built by F:\dev\resume\build.ps1 and leave out the phone number. -->
+          <a href="cv/Benicio-Pacheco-Resume.pdf" target="_blank" rel="noopener" class="text-link" id="hero-resume">
+            Resume
+            <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+          </a>
+          <a href="https://github.com/benipach" target="_blank" rel="noopener" class="text-link">
+            GitHub
+            <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+          </a>
         </div>
       </div>
+    </section>
 
-      <div class="skills-grid reveal" data-reveal="right">
-      
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-lang-label">Lenguajes</div>
-          <div class="skill-tags">
-            <span class="tag">Java</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">Python</span>
-            <span class="tag">C#</span>
-            <span class="tag">SQL</span>
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-          </div>
-        </div>
-      
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-db-label">Bases de datos</div>
-          <div class="skill-tags">
-            <span class="tag">PostgreSQL</span>
-            <span class="tag">MySQL</span>
-            <span class="tag">SQL Server</span>
-          </div>
-        </div>
-      
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-tools-label">Herramientas</div>
-          <div class="skill-tags">
-            <span class="tag">Git</span>
-            <span class="tag">GitHub</span>
-            <span class="tag">GitLab</span>
-            <span class="tag">Postman</span>
-            <span class="tag">npm</span>
-            <span class="tag">GitHub Pages</span>
-          </div>
-        </div>
-      
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-ide-label">Editores e IDEs</div>
-          <div class="skill-tags">
-            <span class="tag">Visual Studio Code</span>
-            <span class="tag">Eclipse</span>
-          </div>
+    <!-- PROJECTS -->
+    <section id="projects" class="section section-projects">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-label">Projects</p>
+          <h2 class="section-title">What I'm building</h2>
+          <p class="section-sub">Personal and school projects. The featured one is where most of my time goes.</p>
         </div>
 
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-spoken-label">Idiomas</div>
-          <div class="skill-tags">
-            <span class="tag highlight" id="spoken-lang-1">Español — Nativo</span>
-            <span class="tag highlight" id="spoken-lang-2">Inglés — C1</span>
-          </div>
-        </div>
-      
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-soft-label">Habilidades blandas</div>
-          <div class="skill-tags">
-            <span class="tag" id="soft-skill-1">Pensamiento crítico</span>
-            <span class="tag" id="soft-skill-2">Comunicación</span>
-            <span class="tag" id="soft-skill-3">Trabajo en equipo</span>
-            <span class="tag" id="soft-skill-4">Adaptabilidad</span>
-            <span class="tag" id="soft-skill-5">Aprendizaje rápido</span>
-            <span class="tag" id="soft-skill-6">Atención al detalle</span>
-          </div>
-        </div>
-      
-        <div class="skill-category reveal" data-reveal="card">
-          <div class="skill-category-label" id="skill-learn-label">Aprendiendo</div>
-          <div class="skill-tags">
-            <span class="tag">React</span>
-            <span class="tag">Node.js</span>
-            <span class="tag">REST APIs</span>
-          </div>
-        </div>
-      
-      </div>
-    </div>
-  </section>
+        <!-- Featured: big cards, a wide cover on top and two columns below:
+             what the project is (left) and how it's built (right).
+             To feature another project, move its card here from "Other projects"
+             and give it the same format (cover + .project-body with .project-main and .project-inside). -->
+        <h3 class="group-title" data-i18n="projFeatured">Featured</h3>
+        <div class="project-list">
 
-  <!-- PROJECTS -->
-  <section id="proyectos" class="section-projects">
-    <div class="section-label reveal" data-reveal="eyebrow">Proyectos</div>
-    <h2 class="section-title reveal" data-reveal="title">Lo que estoy construyendo</h2>
-    <p class="section-sub reveal" data-reveal="up">Proyectos propios donde aplico y expando lo que aprendo día a día.</p>
-
-    <div class="projects-grid">
-
-      <!-- F1 Hub -->
-      <div class="project-card reveal" data-reveal="card">
-        <div class="project-thumb featured-bg">
-          <img src="img/projects/f1hub-bg.webp" class="project-bg">
-          <img src="img/projects/f1hub-logo.webp" class="project-logo">
-          <div class="project-stripe"></div>
-        </div>
-        <div class="project-body">
-          <span class="project-badge" id="f1-badge">En progreso</span>
-          <span class="project-date" id="f1-date">Abr 2026 – actualidad</span>
-          <h3 class="project-title">Formula 1 Hub</h3>
-          <p class="project-desc" id="f1-desc">Sitio web dinámico sobre Fórmula 1 con calendario interactivo de carreras, tabla de posiciones, seguimiento en tiempo real y diseño inspirado en la estética oficial de la F1.</p>
-          <div class="project-tech">
-            <span class="tech-pill">HTML</span>
-            <span class="tech-pill">CSS</span>
-            <span class="tech-pill">JavaScript</span>
-            <span class="tech-pill">REST API</span>
-            <span class="tech-pill">GitHub Pages</span>
-          </div>
-          <div class="project-links">
-            <a href="https://benipach.github.io/f1-hub-project" target="_blank" rel="noopener" class="project-link primary" id="f1-cta">
-              <span id="f1-cta-text">Ver sitio</span>
-              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+          <!-- F1 Hub — TODO: swap the cover for a short GIF/video of the live timing page -->
+          <article class="project">
+            <a class="project-cover" href="https://benipach.github.io/f1-hub-project" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <img src="img/projects/f1hub-cover.webp" alt="" width="2100" height="900" loading="lazy">
             </a>
-            <a href="https://github.com/benipach/f1-hub-project" class="project-link secondary" id="f1-repo">Repositorio</a>
-          </div>
+            <div class="project-body">
+              <div class="project-main">
+                <div class="project-meta">
+                  <span class="chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="projInProgress">In progress</span></span>
+                  <span class="project-date" data-i18n="f1Date">Apr 2026 – present</span>
+                </div>
+                <h4 class="project-title">Formula 1 Hub</h4>
+                <p class="project-desc" data-i18n="f1Desc">Every Grand Prix in one place: the calendar in your local time, live timing, full results and championship standings, plus driver and team profiles and an archive covering the history of the sport.</p>
+                <div class="project-links">
+                  <a href="https://benipach.github.io/f1-hub-project" target="_blank" rel="noopener" class="btn btn-primary">
+                    <span data-i18n="projSite">View site</span>
+                    <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+                  </a>
+                  <a href="https://github.com/benipach/f1-hub-project" target="_blank" rel="noopener" class="text-link">
+                    <span data-i18n="projRepo">Repository</span>
+                    <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+                  </a>
+                </div>
+              </div>
+              <div class="project-inside">
+                <p class="project-inside-label" data-i18n="projInside">Under the hood</p>
+                <ul class="project-highlights">
+                  <li data-i18n="f1H1">Live timing: a Node.js relay connects to F1's official live timing feed (SignalR over WebSocket) and streams it to the site. It's deployed on Render.</li>
+                  <li data-i18n="f1H2">A GitHub Actions job runs every 30 minutes on race weekends: when a session ends, it pulls results and weather from the OpenF1 API and commits the updated data.</li>
+                  <li data-i18n="f1H3">A season archive, still a work in progress, that aims to cover the full history of F1: standings, cumulative points charts and career stats precomputed from every season.</li>
+                </ul>
+                <ul class="project-tech">
+                  <li>JavaScript</li>
+                  <li>Node.js</li>
+                  <li>WebSockets</li>
+                  <li>Chart.js</li>
+                  <li>GitHub Actions</li>
+                  <li>OpenF1 API</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Other projects: compact cards without a cover.
+             Order: ongoing projects first, then by end date (most recent first). -->
+        <h3 class="group-title group-title--spaced" data-i18n="projOther">Other projects</h3>
+        <div class="project-grid">
+
+          <!-- Sin Códigos — TODO: add the description (.project-desc), technologies (.project-tech) and links (.project-links) -->
+          <article class="project-mini">
+            <div class="project-meta">
+              <span class="chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="projInProgress">In progress</span></span>
+              <span class="project-date" data-i18n="sinCodDate">Oct 2026 – present</span>
+            </div>
+            <h4 class="project-mini-title">Sin Códigos</h4>
+          </article>
+
+          <!-- School database -->
+          <article class="project-mini">
+            <div class="project-meta">
+              <span class="project-date" data-i18n="schoolDbDate">Jul 2025 – Dec 2025</span>
+            </div>
+            <h4 class="project-mini-title" data-i18n="schoolDbTitle">School database</h4>
+            <p class="project-desc" data-i18n="schoolDbDesc">A MySQL database for managing a technical school: students, courses, subjects, grades and staff, with triggers, functions, stored procedures, views and role-based user permissions, seeded with over 10,000 sample grades. It was a team of five, so splitting up the work and keeping everything consistent was part of the job.</p>
+            <ul class="project-tech">
+              <li>MySQL</li>
+              <li>SQL</li>
+              <li>phpMyAdmin</li>
+            </ul>
+            <div class="project-links">
+              <a href="https://github.com/benipach/bd-escuela" target="_blank" rel="noopener" class="text-link">
+                <span data-i18n="projRepo">Repository</span>
+                <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Ecoluz -->
+          <article class="project-mini">
+            <div class="project-meta">
+              <span class="project-date" data-i18n="ecoluzDate">Aug 2025 – Nov 2025</span>
+            </div>
+            <h4 class="project-mini-title">Ecoluz</h4>
+            <p class="project-desc" data-i18n="ecoluzDesc">An online store for EcoLuz, a portable solar lamp with a built-in mosquito repellent. It has a catalog of eight models, each with its own detail page, and a CSS-only checkout modal that sends orders through Formspree.</p>
+            <ul class="project-tech">
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>Formspree</li>
+              <li>GitHub Pages</li>
+            </ul>
+            <div class="project-links">
+              <a href="https://benipach.github.io/Ecoluz/" target="_blank" rel="noopener" class="text-link">
+                <span data-i18n="projSite">View site</span>
+                <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+              </a>
+              <a href="https://github.com/benipach/Ecoluz" target="_blank" rel="noopener" class="text-link">
+                <span data-i18n="projRepo">Repository</span>
+                <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- 2024 F1 season database -->
+          <article class="project-mini">
+            <div class="project-meta">
+              <span class="project-date" data-i18n="f1DbDate">Aug 2024 – Feb 2025</span>
+            </div>
+            <h4 class="project-mini-title" data-i18n="f1DbTitle">2024 F1 season database</h4>
+            <p class="project-desc" data-i18n="f1DbDesc">A MySQL database of the 2024 Formula 1 season: drivers, teams, circuits, the winners of all 24 races and both championships. It's normalized to third normal form, with queries that join up to five tables. I built it on my own, from the data model to the queries.</p>
+            <ul class="project-tech">
+              <li>MySQL</li>
+              <li>SQL</li>
+              <li>phpMyAdmin</li>
+            </ul>
+            <div class="project-links">
+              <a href="https://github.com/benipach/bd-f1-2024" target="_blank" rel="noopener" class="text-link">
+                <span data-i18n="projRepo">Repository</span>
+                <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+              </a>
+            </div>
+          </article>
+
         </div>
       </div>
+    </section>
 
-      <!-- EcoLuz -->
-      <div class="project-card reveal" data-reveal="card">
-        <div class="project-thumb featured-bg">
-          <img src="img/projects/ecoluz-bg.webp" class="project-bg">
-          <img src="img/projects/ecoluz-logo.webp" class="project-logo">
-          <div class="project-stripe"></div>
+    <!-- ABOUT -->
+    <section id="about" class="section section-about">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-label">About me</p>
+          <h2 class="section-title">Who I am and what I'm working on</h2>
+          <p class="section-sub">My background, my skills and what I'm looking for.</p>
         </div>
-        <div class="project-body">
-          <span class="project-badge" id="ecoluz-badge">Pausado temporalmente</span>
-          <span class="project-date" id="ecoluz-date">Oct 2025 – Dic 2025</span>
-          <h3 class="project-title">EcoLuz</h3>
-          <p class="project-desc" id="ecoluz-desc">Sitio de e-commerce de iluminación solar sostenible con catálogo de productos, páginas informativas y formulario de contacto.</p>
-          <div class="project-tech">
-            <span class="tech-pill">HTML</span>
-            <span class="tech-pill">CSS</span>
-            <span class="tech-pill">GitHub Pages</span>
+
+        <!-- Description + facts card -->
+        <div class="about">
+          <div class="about-text">
+            <p class="about-lead" data-i18n="aboutLead">I'm Benicio Pacheco, a developer from Buenos Aires. I'm finishing a six-year technical high school program in computing at Technical High School No. 35 “Ing. Eduardo Latzina”, focused on programming, databases and networking.</p>
+            <p data-i18n="aboutP1">I work across the stack, and I enjoy designing an interface as much as working out the logic behind it. I code because I like building tools that are useful and well made: whenever an app could work better, I end up thinking about how I'd fix it.</p>
+            <p data-i18n="aboutP2">I care about how things look, but just as much about logic that holds up in edge cases, because both shape the experience of the people using it. On top of what I learned at school, I taught myself web development, and that's how I built F1 Hub, my biggest project. The hardest part was keeping lap times and track positions in sync while live data streams in during a session.</p>
+            <p data-i18n="aboutP3">Having worked on every layer, from the database to the server it runs on, helps me see how the pieces of a project fit together, and that makes teamwork easier. In my school internship, for example, my classmates and I set up an Ubuntu Server machine in the school's rack to host its website. In 2027 I start a Systems Engineering degree at UTN (National Technological University), so I'm looking for a part-time remote role where I can keep growing while I study.</p>
           </div>
-          <div class="project-links">
-            <a href="https://benipach.github.io/Ecoluz" target="_blank" rel="noopener" class="project-link primary" id="ecoluz-cta">
-              <span id="ecoluz-cta-text">Ver sitio</span>
-              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><path d="M2 10L10 2M10 2H5M10 2v5"/></svg>
+
+          <dl class="facts">
+            <div><dt data-i18n="factLocation">Location</dt><dd data-i18n="factLocationValue">Buenos Aires, Argentina</dd></div>
+            <div><dt data-i18n="factTimezone">Time zone</dt><dd data-i18n="factTimezoneValue">UTC−3 · 1–2 hours ahead of US Eastern</dd></div>
+            <div><dt data-i18n="factEducation">Education</dt><dd data-i18n="factEducationValue">Computer Technician diploma (2026) · Systems Engineering at UTN, from 2027</dd></div>
+            <div><dt data-i18n="factLanguages">Languages</dt><dd data-i18n="factLanguagesValue">Spanish (native) · English C1</dd></div>
+            <div><dt data-i18n="factLooking">Looking for</dt><dd><span class="chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="factLookingValue">Part-time remote developer role</span></span></dd></div>
+          </dl>
+        </div>
+
+        <!-- Background: two timelines, education and work experience.
+             Each card is a <details>: the header (date, title and role) is always visible and the rest
+             expands on click. They start closed; to have one start open, add the open attribute to its <details>.
+             main.js calculates the duration (.path-duration) from data-start and data-end (YYYY-MM);
+             if the end date hasn't arrived yet, it counts up to the current month.
+             data-unit="years" shows calendar years only (2021 to 2026 = 6 years), as for school.
+             The status chip (.path-status: "In progress" / "Current") hides itself once the end date has passed. -->
+        <div class="subsection">
+          <div class="subsection-head">
+            <p class="section-label" data-i18n="pathLabel">Background</p>
+            <h3 class="subsection-title" data-i18n="pathTitle">Education and experience</h3>
+          </div>
+
+          <div class="path-cols">
+
+            <div class="path-col">
+              <h4 class="path-col-title" data-i18n="pathEducation">Education</h4>
+              <ol class="path">
+                <li class="path-item path-item--current">
+                  <details class="path-details">
+                    <summary class="path-summary">
+                      <div class="path-top">
+                        <span class="path-when">
+                          <span class="path-date" data-i18n="edu1Date">2021 – 2026</span>
+                          <span class="path-duration" data-start="2021-03" data-end="2026-11" data-unit="years"></span>
+                        </span>
+                        <span class="chip path-status"><span class="status-dot" aria-hidden="true"></span><span data-i18n="statusOngoing">In progress</span></span>
+                      </div>
+                      <h5 class="path-title" data-i18n="edu1Title">Technical High School No. 35 “Ing. Eduardo Latzina”</h5>
+                      <p class="path-role" data-i18n="edu1Degree">Computer Technician diploma</p>
+                      <span class="path-more" aria-hidden="true">
+                        <span class="path-more-show" data-i18n="pathShowMore">Show details</span>
+                        <span class="path-more-hide" data-i18n="pathShowLess">Hide details</span>
+                        <svg class="path-more-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+                      </span>
+                    </summary>
+                    <div class="path-body">
+                      <!-- Only the subjects most relevant to a developer role. To add one, add an <li> with its data-i18n
+                           (and the text in translations.js). The internship is listed under Work experience. -->
+                      <dl class="path-areas">
+                        <div>
+                          <dt data-i18n="areaCoursework">Relevant coursework</dt>
+                          <dd><ul>
+                            <li data-i18n="subjAlgo">Algorithms and Data Structures Lab</li>
+                            <li data-i18n="subjOop">Object-Oriented Programming Lab</li>
+                            <li data-i18n="subjAnalysis">Systems Analysis</li>
+                            <li data-i18n="subjSysDev">Systems Development</li>
+                            <li data-i18n="subjDbAdmin">Database Administration and Management</li>
+                            <li data-i18n="subjSysNetAdmin">Systems and Network Administration</li>
+                          </ul></dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </details>
+                </li>
+              </ol>
+            </div>
+
+            <div class="path-col">
+              <h4 class="path-col-title" data-i18n="pathWork">Experience</h4>
+              <ol class="path">
+                <li class="path-item path-item--current">
+                  <details class="path-details">
+                    <summary class="path-summary">
+                      <div class="path-top">
+                        <span class="path-when">
+                          <span class="path-date">Mar 2026 – Nov 2026</span>
+                          <span class="path-duration" data-start="2026-03" data-end="2026-11"></span>
+                        </span>
+                        <span class="chip path-status"><span class="status-dot" aria-hidden="true"></span><span data-i18n="statusCurrent">Current</span></span>
+                      </div>
+                      <h5 class="path-title" data-i18n="exp1Title">School internship, Technical High School No. 35</h5>
+                      <p class="path-role" data-i18n="exp1Role">Server setup and web hosting</p>
+                      <span class="path-more" aria-hidden="true">
+                        <span class="path-more-show" data-i18n="pathShowMore">Show details</span>
+                        <span class="path-more-hide" data-i18n="pathShowLess">Hide details</span>
+                        <svg class="path-more-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+                      </span>
+                    </summary>
+                    <div class="path-body">
+                      <ul class="path-bullets">
+                        <li data-i18n="exp1B1">Set up a server in the school's rack and connected it to the school network</li>
+                        <li data-i18n="exp1B2">Installed and configured Ubuntu Server</li>
+                        <li data-i18n="exp1B3">Hosted the school's website on that server, saving the school the cost of external hosting</li>
+                      </ul>
+                    </div>
+                  </details>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Skills: one row per area. To add a technology, add a <span class="skill">. -->
+        <div class="subsection">
+          <div class="subsection-head">
+            <p class="section-label">Skills</p>
+            <h3 class="subsection-title" data-i18n="skillsTitle">What I work with</h3>
+          </div>
+
+          <dl class="skills-list">
+            <div><dt data-i18n="skillLanguages">Languages</dt><dd class="skills-items"><span class="skill">JavaScript</span><span class="skill">Java</span><span class="skill">SQL</span></dd></div>
+            <div><dt>Web</dt><dd class="skills-items"><span class="skill">HTML</span><span class="skill">CSS</span><span class="skill">Node.js</span><span class="skill">REST APIs</span></dd></div>
+            <div><dt data-i18n="skillData">Databases</dt><dd class="skills-items"><span class="skill">MySQL</span></dd></div>
+            <div><dt data-i18n="skillTools">Tools</dt><dd class="skills-items"><span class="skill">Git</span><span class="skill">GitHub</span><span class="skill">GitHub Actions</span></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section section-contact">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-label">Contact</p>
+          <h2 class="section-title">Let's talk</h2>
+          <p class="section-sub">Whether it's about a part-time role or one of my projects, email is the fastest way to reach me.</p>
+          <p class="chip contact-chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="contactAvailable">Available for part-time remote work · 20 h/week</span></p>
+        </div>
+
+        <!-- Email is the main channel. The "Copy" button uses the clipboard;
+             if the browser doesn't allow it, it selects the address so it can be copied by hand. -->
+        <div class="contact-mail">
+          <p class="contact-address" id="contact-address">pacheco.benicio@gmail.com</p>
+          <div class="contact-actions">
+            <button type="button" class="btn btn-primary" id="copy-email" data-email="pacheco.benicio@gmail.com">
+              <span data-i18n="contactCopy">Copy email</span>
+            </button>
+            <a href="mailto:pacheco.benicio@gmail.com" class="btn btn-secondary">
+              <span data-i18n="contactWrite">Email me</span>
+              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
             </a>
-            <a href="https://github.com/benipach/Ecoluz" class="project-link secondary" id="ecoluz-repo">Repositorio</a>
+            <span class="contact-status" id="copy-status" role="status" aria-live="polite"></span>
           </div>
         </div>
+
+        <!-- Other channels -->
+        <ul class="contact-others">
+          <li>
+            <img class="contact-icon" src="img/logos/github-logo.webp" alt="" width="28" height="28">
+            <a href="https://github.com/benipach" target="_blank" rel="noopener" class="text-link">
+              GitHub
+              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+            </a>
+          </li>
+          <li>
+            <img class="contact-icon" src="img/logos/linkedin-logo.webp" alt="" width="28" height="28">
+            <a href="https://linkedin.com/in/benicio-pacheco" target="_blank" rel="noopener" class="text-link">
+              LinkedIn
+              <svg class="icon-ext" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g><path d="M2 10L10 2M10 2H5M10 2v5"/><path d="M2 10L10 2M10 2H5M10 2v5" transform="translate(-12 12)"/></g></svg>
+            </a>
+          </li>
+        </ul>
       </div>
+    </section>
 
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contacto" class="section-contact">
-    <div class="section-label reveal" data-reveal="eyebrow">Contacto</div>
-    <h2 class="section-title reveal" data-reveal="title">Hablemos</h2>
-    <p class="section-sub reveal" data-reveal="up">Siempre abierto a oportunidades, colaboraciones o simplemente charlar sobre código.</p>
-
-    <div class="contact-inner reveal" data-reveal="up">
-      <div class="contact-links">
-        <a href="https://github.com/benipach" target="_blank" rel="noopener" class="contact-item reveal" data-reveal="item">
-          <div class="contact-item-left">
-            <div class="contact-icon">
-              <img src="img/logos/github-logo.webp" alt="GitHub">
-            </div>
-            <div>
-              <div class="contact-item-label">GitHub</div>
-              <div class="contact-item-value">github.com/benipach</div>
-            </div>
-          </div>
-          <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </a>
-
-        <a href="https://linkedin.com/in/benicio-pacheco" target="_blank" rel="noopener" class="contact-item reveal" data-reveal="item">
-          <div class="contact-item-left">
-            <div class="contact-icon">
-              <img src="img/logos/linkedin-logo.webp" alt="LinkedIn">
-            </div>
-            <div>
-              <div class="contact-item-label">LinkedIn</div>
-              <div class="contact-item-value">linkedin.com/in/benicio-pacheco</div>
-            </div>
-          </div>
-          <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </a>
-
-        <a href="mailto:pacheco.benicio@gmail.com" class="contact-item reveal" data-reveal="item">
-          <div class="contact-item-left">
-            <div class="contact-icon">
-              <img src="img/logos/email-logo.webp" alt="Email">
-            </div>
-            <div>
-              <div class="contact-item-label">Email</div>
-              <div class="contact-item-value">pacheco.benicio@gmail.com</div>
-            </div>
-          </div>
-          <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
+  </main>
 
   <!-- FOOTER -->
-  <footer>
-    <span class="reveal" data-reveal="up">© 2026 Benicio Pacheco</span>
-    <span id="footer-right" class="reveal" data-reveal="up">Hecho con HTML, CSS y ganas.</span>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span>© 2026 Benicio Pacheco</span>
+      </div>
+    </div>
   </footer>
+
+  <!-- Visit stats (GoatCounter): no cookies, so no consent banner needed. Dashboard: benipach.goatcounter.com -->
+  <script data-goatcounter="https://benipach.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 
 </body>
 </html>

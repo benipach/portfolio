@@ -1,107 +1,89 @@
-document.documentElement.classList.add('js');
+/* ════════════════════════════════════════════════
+   Storage helpers (localStorage can throw in private mode)
+   ════════════════════════════════════════════════ */
+function readStorage(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+
+function writeStorage(key, value) {
+  try { localStorage.setItem(key, value); } catch (e) {}
+}
+
+
 /* ════════════════════════════════════════════════
    i18n — Language switching (no page reload)
    ════════════════════════════════════════════════ */
 
-var currentLang = localStorage.getItem('lang') || 'en';
+var currentLang = TRANSLATIONS[readStorage('lang')] ? readStorage('lang') : 'en';
 
 function applyLang(lang) {
   var t = TRANSLATIONS[lang];
   if (!t) return;
   currentLang = lang;
-  localStorage.setItem('lang', lang);
+  writeStorage('lang', lang);
 
   /* <html> lang attribute */
   document.documentElement.lang = t.htmlLang;
   document.title = t.pageTitle;
 
-  /* Nav */
-  document.querySelector('.nav-logo').href = '#';
-  setLink('#nav-link-about',    t.navAboutHref,   t.navAbout);
-  setLink('#nav-link-projects', t.navProjHref,    t.navProjects);
-  setLink('#nav-link-contact',  t.navContactHref, t.navContact);
-  setLink('#mobile-link-about',    t.navAboutHref,   t.mobileAbout);
-  setLink('#mobile-link-projects', t.navProjHref,    t.mobileProjects);
-  setLink('#mobile-link-contact',  t.navContactHref, t.mobileContact);
+  /* Nav (the section ids are fixed in English, so only the text changes) */
+  setLabel('#nav-link-about',    t.navAbout);
+  setLabel('#nav-link-projects', t.navProjects);
+  setLabel('#nav-link-contact',  t.navContact);
+  setLabel('#mobile-link-about',    t.mobileAbout);
+  setLabel('#mobile-link-projects', t.mobileProjects);
+  setLabel('#mobile-link-contact',  t.mobileContact);
 
-  var hamburger = document.getElementById('nav-hamburger');
-  if (hamburger) hamburger.setAttribute('aria-label', t.hamburgerLabel);
+  var nav = document.querySelector('.nav');
+  if (nav) nav.setAttribute('aria-label', t.navLabel);
 
-  /* Lang switcher: highlight active */
+  /* Lang switcher: highlight active (the underline slides via data-active in CSS) */
   document.querySelectorAll('.lang-opt').forEach(function(el) {
-    el.classList.toggle('active', el.dataset.lang === lang);
+    var active = el.dataset.lang === lang;
+    el.classList.toggle('active', active);
+    el.setAttribute('aria-pressed', String(active));
   });
-
-  /* Section IDs (needed for anchor links to work) */
-  setId('.section-about',   t.sectionAboutId);
-  setId('.section-projects', t.sectionProjId);
-  setId('.section-contact',  t.sectionContactId);
+  var switcher = document.querySelector('.lang-switcher');
+  if (switcher) switcher.setAttribute('data-active', lang);
 
   /* Hero */
-  setText('.hero-eyebrow',  t.heroEyebrow);
-  setText('.hero-desc',     t.heroDesc);
-  setText('.race-bar-label', t.raceBarLabel);
-  setText('.race-bar-pct-text', t.raceBarPct);
-  setLink('.hero-cta-1', t.heroCta1Href, t.heroCta1);
-  setLink('.hero-cta-2', t.heroCta2Href, t.heroCta2);
+  setText('.hero-eyebrow', t.heroEyebrow);
+  setText('.hero-desc',    t.heroDesc);
+  setText('.hero-status',  t.heroStatus);
+  setLabel('.hero-cta-1', t.heroCta1);
+  setLabel('.hero-cta-2', t.heroCta2);
+  setLabel('#hero-resume', t.heroResume);
+  var resume = document.getElementById('hero-resume');
+  if (resume) resume.setAttribute('href', t.resumeFile);
 
   /* About section */
   setText('.section-about .section-label', t.aboutLabel);
   setText('.section-about .section-title', t.aboutTitle);
   setText('.section-about .section-sub',   t.aboutSub);
-  setText('#about-p1', t.aboutP1);
-  setText('#about-p2', t.aboutP2);
-  setText('#about-p3', t.aboutP3);
 
-  /* Timeline */
-  setText('#edu1-title',  t.edu1Title);
-  setText('#edu1-degree', t.edu1Degree);
-  setText('#edu1-date',   t.edu1Date);
-  setText('#edu1-desc',   t.edu1Desc);
-  setText('#exp1-title',  t.exp1Title);
-  setText('#exp1-role',   t.exp1Role);
-  setText('#exp1-date',   t.exp1Date);
-  setText('#exp1-desc',   t.exp1Desc);
+  /* Elements marked with data-i18n="key" (projects, description, background, skills) */
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var value = t[el.getAttribute('data-i18n')];
+    if (value !== undefined) el.textContent = value;
+  });
 
-  /* Skills */
-  setText('#skill-lang-label',   t.skillLangLabel);
-  setText('#skill-db-label',     t.skillDbLabel);
-  setText('#skill-tools-label',  t.skillToolsLabel);
-  setText('#skill-ide-label',    t.skillIdeLabel);
-  setText('#skill-spoken-label', t.skillSpokenLabel);
-  setText('#skill-soft-label',   t.skillSoftLabel);
-  setText('#skill-learn-label',  t.skillLearnLabel);
-  setText('#soft-skill-1', t.softSkill1);
-  setText('#soft-skill-2', t.softSkill2);
-  setText('#soft-skill-3', t.softSkill3);
-  setText('#soft-skill-4', t.softSkill4);
-  setText('#soft-skill-5', t.softSkill5);
-  setText('#soft-skill-6', t.softSkill6);
-  setText('#spoken-lang-1', t.spokenLang1);
-  setText('#spoken-lang-2', t.spokenLang2);
+  /* Durations ("5 years 8 months") are written in the active language */
+  updateDurations(t);
 
   /* Projects */
   setText('.section-projects .section-label', t.projLabel);
   setText('.section-projects .section-title', t.projTitle);
   setText('.section-projects .section-sub',   t.projSub);
-  setText('#f1-badge',    t.f1Badge);
-  setText('#f1-date',     t.f1Date);
-  setText('#f1-desc',     t.f1Desc);
-  setText('#f1-cta-text', t.f1Cta);
-  setText('#f1-repo',     t.f1Repo);
-  setText('#ecoluz-badge',    t.ecoluzBadge);
-  setText('#ecoluz-date',     t.ecoluzDate);
-  setText('#ecoluz-desc',     t.ecoluzDesc);
-  setText('#ecoluz-cta-text', t.ecoluzCta);
-  setText('#ecoluz-repo',     t.ecoluzRepo);
 
   /* Contact */
   setText('.section-contact .section-label', t.contactLabel);
   setText('.section-contact .section-title', t.contactTitle);
   setText('.section-contact .section-sub',   t.contactSub);
 
-  /* Footer */
-  setText('#footer-right', t.footerRight);
+
+  /* Labels that depend on state */
+  syncMenuLabel();
+  syncThemeLabel();
 }
 
 function setText(selector, value) {
@@ -109,10 +91,9 @@ function setText(selector, value) {
   if (el) el.textContent = value;
 }
 
-function setLink(selector, href, text) {
+function setLabel(selector, text) {
   var el = document.querySelector(selector);
   if (!el) return;
-  el.href = href;
   /* preserve child nodes (SVG icons) — only update text node */
   var textNode = Array.from(el.childNodes).find(function(n) {
     return n.nodeType === Node.TEXT_NODE && n.textContent.trim();
@@ -124,168 +105,290 @@ function setLink(selector, href, text) {
   }
 }
 
-function setId(selector, newId) {
-  var el = document.querySelector(selector);
-  if (el) el.id = newId;
-}
-
 
 /* ════════════════════════════════════════════════
-   Hero exit: slides right on scroll (sticky)
+   Background — duration of each stage ("5 years 8 months")
+   Counts months like LinkedIn: start and end month both included.
+   If the end hasn't arrived yet, it counts up to the current month.
    ════════════════════════════════════════════════ */
-(function() {
-  var heroInner     = document.querySelector('.hero-inner');
-  var heroContainer = document.querySelector('.hero-scroll-container');
-  if (!heroInner || !heroContainer) return;
+function updateDurations(t) {
+  var now = new Date();
+  var currentMonth = now.getFullYear() * 12 + now.getMonth(); /* months since year 0 */
 
-  function onScroll() {
-    var scrolled = window.scrollY;
-    /* runway = espacio sticky disponible: container - viewport */
-    var range = heroContainer.offsetHeight - window.innerHeight;
-    if (scrolled <= 0) {
-      heroInner.style.transform = '';
-      heroInner.style.opacity   = '';
-      return;
-    }
-    var progress = Math.min(scrolled / range, 1);
-    heroInner.style.transform = 'translateX(' + (progress * 210) + '%)';
-    heroInner.style.opacity   = String(Math.max(0, 1 - progress * 2));
+  function toMonths(value) { /* "2021-03" -> months since year 0 */
+    var parts = value.split('-');
+    return parseInt(parts[0], 10) * 12 + parseInt(parts[1], 10) - 1;
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-})();
+  function unit(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+
+  document.querySelectorAll('.path-duration').forEach(function(el) {
+    var start = toMonths(el.getAttribute('data-start'));
+    var end = Math.min(toMonths(el.getAttribute('data-end')), currentMonth);
+    var total = Math.max(end - start + 1, 1);
+    var years = Math.floor(total / 12);
+    var months = total % 12;
+
+    if (el.getAttribute('data-unit') === 'years') {
+      /* Calendar years only, both ends included (school: 2021 to 2026 = 6 years) */
+      var calendarYears = Math.floor(end / 12) - Math.floor(start / 12) + 1;
+      el.textContent = unit(calendarYears, t.durYear, t.durYears);
+    } else {
+      var parts = [];
+      if (years) parts.push(unit(years, t.durYear, t.durYears));
+      if (months) parts.push(unit(months, t.durMonth, t.durMonths));
+      el.textContent = parts.join(' ');
+    }
+
+    /* Once the end date has passed, hide the "In progress" / "Current" chip */
+    var item = el.closest('.path-item');
+    var status = item && item.querySelector('.path-status');
+    if (status) status.hidden = toMonths(el.getAttribute('data-end')) < currentMonth;
+  });
+}
 
 
 /* ════════════════════════════════════════════════
    Hamburger menu
    ════════════════════════════════════════════════ */
+var menuBtn = document.getElementById('nav-hamburger');
+var menu    = document.getElementById('nav-mobile-menu');
+
+function syncMenuLabel() {
+  if (!menuBtn) return;
+  var t = TRANSLATIONS[currentLang];
+  var isOpen = menuBtn.getAttribute('aria-expanded') === 'true';
+  menuBtn.setAttribute('aria-label', isOpen ? t.hamburgerClose : t.hamburgerOpen);
+}
+
 (function() {
-  var btn  = document.getElementById('nav-hamburger');
-  var menu = document.getElementById('nav-mobile-menu');
-  if (!btn || !menu) return;
+  if (!menuBtn || !menu) return;
+  var hideTimer;
 
   function openMenu() {
-    menu.style.display = 'flex';
-    requestAnimationFrame(function() {
-      menu.classList.add('open');
-      btn.classList.add('open');
-    });
-    btn.setAttribute('aria-expanded', 'true');
+    clearTimeout(hideTimer);
+    menu.hidden = false;
+    requestAnimationFrame(function() { menu.classList.add('open'); });
+    menuBtn.classList.add('open');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    syncMenuLabel();
   }
 
   function closeMenu() {
     menu.classList.remove('open');
-    btn.classList.remove('open');
-    btn.setAttribute('aria-expanded', 'false');
-    menu.addEventListener('transitionend', function hide() {
-      menu.style.display = 'none';
-      menu.removeEventListener('transitionend', hide);
-    });
+    menuBtn.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    syncMenuLabel();
+    /* matches the 150ms opacity transition in CSS */
+    hideTimer = setTimeout(function() { menu.hidden = true; }, 160);
   }
 
-  btn.addEventListener('click', function() {
-    menu.classList.contains('open') ? closeMenu() : openMenu();
+  menuBtn.addEventListener('click', function() {
+    menuBtn.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
   });
 
   menu.querySelectorAll('a').forEach(function(a) {
     a.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') {
+      closeMenu();
+      menuBtn.focus();
+    }
+  });
+
+  /* Close the mobile menu if the viewport grows past the breakpoint */
+  window.matchMedia('(min-width: 761px)').addEventListener('change', function(e) {
+    if (e.matches && !menu.hidden) closeMenu();
+  });
+})();
+
+
+/* ════════════════════════════════════════════════
+   Dark mode toggle
+   Default is light; the user's manual choice is saved.
+   ════════════════════════════════════════════════ */
+var themeBtn = document.getElementById('theme-toggle');
+
+function syncThemeLabel() {
+  if (!themeBtn) return;
+  var t = TRANSLATIONS[currentLang];
+  var dark = document.documentElement.classList.contains('dark');
+  themeBtn.setAttribute('aria-label', dark ? t.themeToLight : t.themeToDark);
+}
+
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+if (themeBtn) {
+  themeBtn.addEventListener('click', function() {
+    var root = document.documentElement;
+    var dark = !root.classList.contains('dark');
+
+    function apply() {
+      root.classList.toggle('dark', dark);
+      writeStorage('theme', dark ? 'dark' : 'light');
+      syncThemeLabel();
+    }
+
+    /* the new icon spins in (see .theme-switching in CSS) */
+    root.classList.add('theme-switching');
+    setTimeout(function() { root.classList.remove('theme-switching'); }, 650);
+
+    /* Without View Transitions (or with reduced motion), switch instantly */
+    if (!document.startViewTransition || reduceMotion.matches) {
+      apply();
+      return;
+    }
+
+    /* The new theme grows as a circle from the center of the button */
+    var r = themeBtn.getBoundingClientRect();
+    var x = r.left + r.width / 2;
+    var y = r.top + r.height / 2;
+    var radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+    document.startViewTransition(apply).ready.then(function() {
+      root.animate(
+        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + radius + 'px at ' + x + 'px ' + y + 'px)'] },
+        { duration: 600, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    });
+  });
+}
+
+
+/* ════════════════════════════════════════════════
+   Hover effects — lines and fills that always finish
+   The line under links and the fill of buttons grow from the left
+   and leave through the right. If the mouse leaves halfway, the line
+   first finishes drawing and only then erases; if it comes back while
+   erasing, it waits for the erase to end and draws again. That way it
+   never jumps mid-way. CSS draws the states: .fx-left anchors the line
+   on the left, .fx-on makes it full (see styles.css).
+   ════════════════════════════════════════════════ */
+(function() {
+  var FALLBACK_MS = 800; /* in case transitionend never fires (e.g. the element gets hidden) */
+
+  document.querySelectorAll('.btn, .text-link, .nav-links a').forEach(function(el) {
+    var state = 'idle'; /* idle → drawing → drawn → erasing → idle */
+    var wanted = false; /* mouse over it, or keyboard focus */
+    var timer;
+
+    function draw() {
+      state = 'drawing';
+      el.classList.add('fx-left', 'fx-on');
+      waitForEnd();
+    }
+
+    function erase() {
+      state = 'erasing';
+      /* At full size, moving the anchor to the right is invisible: then it shrinks toward it */
+      el.classList.remove('fx-left', 'fx-on');
+      waitForEnd();
+    }
+
+    function waitForEnd() {
+      clearTimeout(timer);
+      timer = setTimeout(finished, FALLBACK_MS);
+    }
+
+    function finished() {
+      clearTimeout(timer);
+      if (state === 'drawing') {
+        state = 'drawn';
+        if (!wanted) erase();
+      } else if (state === 'erasing') {
+        state = 'idle';
+        if (wanted) draw();
+      }
+    }
+
+    function enter() {
+      wanted = true;
+      if (state === 'idle') draw();
+    }
+
+    function leave() {
+      wanted = false;
+      if (state === 'drawn') erase();
+    }
+
+    el.addEventListener('mouseenter', enter);
+    el.addEventListener('mouseleave', leave);
+    el.addEventListener('focus', function() { if (el.matches(':focus-visible')) enter(); });
+    el.addEventListener('blur', leave);
+
+    /* Only the line or the fill counts: not the text color, the arrow or the press effect */
+    el.addEventListener('transitionend', function(e) {
+      if (e.target !== el) return;
+      var isLine = e.propertyName === 'background-size';
+      var isFill = e.propertyName === 'transform' && e.pseudoElement === '::before';
+      if (isLine || isFill) finished();
+    });
+  });
+})();
+
+
+/* ════════════════════════════════════════════════
+   Contact — copy email
+   Uses the clipboard; if the browser blocks it, selects the
+   address so it can be copied by hand. Shows a short message.
+   ════════════════════════════════════════════════ */
+(function() {
+  var btn     = document.getElementById('copy-email');
+  var status  = document.getElementById('copy-status');
+  var address = document.getElementById('contact-address');
+  if (!btn || !status) return;
+  var hideTimer;
+
+  function show(key) {
+    status.textContent = TRANSLATIONS[currentLang][key];
+    status.classList.add('is-visible');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function() { status.classList.remove('is-visible'); }, 2400);
+  }
+
+  function selectAddress() {
+    if (!address) return;
+    var range = document.createRange();
+    range.selectNodeContents(address);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    show('contactSelected');
+  }
+
+  btn.addEventListener('click', function() {
+    var email = btn.getAttribute('data-email');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(function() { show('contactCopied'); }, selectAddress);
+    } else {
+      selectAddress();
+    }
   });
 })();
 
 
 /* ════════════════════════════════════════════════
    Lang switcher — init & click handler
+   (this script is deferred, so the DOM is ready)
    ════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function() {
-  /* Apply saved/default lang on load */
-  applyLang(currentLang);
+applyLang(currentLang);
 
-  /* Click on EN or ES */
-  document.querySelectorAll('.lang-opt').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var lang = btn.dataset.lang;
-      if (lang === currentLang) return;
-      applyLang(lang);
+/* The page was hidden while it was still in English (see the script in <head>) */
+document.documentElement.classList.remove('i18n-pending');
 
-    });
+/* Enable the sliding underline only after the first paint,
+   so it doesn't animate when the page loads in Spanish */
+requestAnimationFrame(function() {
+  requestAnimationFrame(function() {
+    var switcher = document.querySelector('.lang-switcher');
+    if (switcher) switcher.classList.add('is-ready');
   });
 });
 
-/* ════════════════════════════════════════════════
-   Dark mode toggle
-   Orden de prioridad: localStorage > prefers-color-scheme
-   ════════════════════════════════════════════════ */
-(function() {
-  var btn  = document.getElementById('theme-toggle');
-  var html = document.documentElement;
-
-  /* applyTheme: actualiza clase, aria-label y (opcionalmente) guarda en localStorage */
-  function applyTheme(dark, persist) {
-    html.classList.toggle('dark', dark);
-    if (btn) btn.setAttribute('aria-label', dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro');
-    if (persist) localStorage.setItem('theme', dark ? 'dark' : 'light');
-  }
-
-  /* Sincronizar aria-label con el estado actual del DOM
-     (la clase .dark ya fue aplicada por el script inline del <head>) */
-  applyTheme(html.classList.contains('dark'), false);
-
-  /* Toggle manual: guardar elección del usuario */
-  if (btn) {
-    btn.addEventListener('click', function() {
-      applyTheme(!html.classList.contains('dark'), true);
-    });
-  }
-
-  /* Default theme is light. Do not follow the OS theme automatically.
-     The user's manual choice is still saved when they use the toggle. */
-})();
-
-/* ════════════════════════════════════════════════
-   Scroll reveal — refined entrance animations
-   ════════════════════════════════════════════════ */
-(function() {
-  function setDelay(selector, step, maxDelay) {
-    document.querySelectorAll(selector).forEach(function(el, index) {
-      var delay = Math.min(index * step, maxDelay);
-      el.style.setProperty('--reveal-delay', delay + 'ms');
-    });
-  }
-
-  function initScrollReveal() {
-    var revealEls = Array.from(document.querySelectorAll('.reveal'));
-    if (!revealEls.length) return;
-
-    setDelay('.section-about > .reveal', 80, 220);
-    setDelay('.section-projects > .reveal', 80, 220);
-    setDelay('.section-contact > .reveal', 80, 220);
-    setDelay('.timeline .timeline-item.reveal', 120, 260);
-    setDelay('.skills-grid .skill-category.reveal', 65, 420);
-    setDelay('.projects-grid .project-card.reveal', 120, 240);
-    setDelay('.contact-links .contact-item.reveal', 90, 220);
-    setDelay('footer .reveal', 80, 160);
-
-    if (!('IntersectionObserver' in window)) {
-      revealEls.forEach(function(el) { el.classList.add('is-visible'); });
-      return;
-    }
-
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      });
-    }, {
-      threshold: 0.16,
-      rootMargin: '0px 0px -10% 0px'
-    });
-
-    revealEls.forEach(function(el) {
-      observer.observe(el);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', initScrollReveal);
-})();
+document.querySelectorAll('.lang-opt').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    if (btn.dataset.lang !== currentLang) applyLang(btn.dataset.lang);
+  });
+});
