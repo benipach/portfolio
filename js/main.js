@@ -68,6 +68,7 @@ function applyLang(lang) {
 
   /* Durations ("5 years 8 months") are written in the active language */
   updateDurations(t);
+  updateClocks(t);
 
   /* Projects */
   setText('.section-projects .section-label', t.projLabel);
@@ -145,6 +146,56 @@ function updateDurations(t) {
     if (status) status.hidden = toMonths(el.getAttribute('data-end')) < currentMonth;
   });
 }
+
+
+/* ════════════════════════════════════════════════
+   Local time — my clock and the visitor's, with the difference
+   ("2:32 PM in Buenos Aires" / "1:32 PM your time · 1 h behind me").
+   The difference comes from each visitor's real time zone, so daylight
+   saving time in the US or Europe is already counted.
+   ════════════════════════════════════════════════ */
+var MY_TIME_ZONE = 'America/Argentina/Buenos_Aires';
+
+/* Minutes ahead of UTC for a time zone at a given moment */
+function zoneOffset(date, timeZone) {
+  var parts = {};
+  new Intl.DateTimeFormat('en-US', {
+    timeZone: timeZone, hourCycle: 'h23',
+    year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'
+  }).formatToParts(date).forEach(function(p) { parts[p.type] = Number(p.value); });
+  var asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute);
+  return Math.round((asUtc - date.getTime()) / 60000);
+}
+
+function updateClocks(t) {
+  var mine = document.getElementById('clock-mine');
+  var yours = document.getElementById('clock-yours');
+  if (!mine || !yours) return;
+  try {
+    var now = new Date();
+    now.setSeconds(0, 0); /* whole minutes, so the offsets come out exact */
+
+    /* English shows 12-hour time (2:32 PM), Spanish 24-hour (14:32) */
+    var clock = function(timeZone) {
+      return new Intl.DateTimeFormat(t.htmlLang, { hour: 'numeric', minute: '2-digit', timeZone: timeZone }).format(now);
+    };
+
+    var diff = -now.getTimezoneOffset() - zoneOffset(now, MY_TIME_ZONE);
+    var hours = Math.floor(Math.abs(diff) / 60);
+    var minutes = Math.abs(diff) % 60;
+    var amount = [hours ? hours + ' h' : '', minutes ? minutes + ' min' : ''].join(' ').trim();
+    var relation = diff === 0 ? t.clockSame
+      : (diff > 0 ? t.clockAhead : t.clockBehind).replace('{n}', amount);
+
+    mine.textContent = t.clockMine.replace('{time}', clock(MY_TIME_ZONE));
+    yours.textContent = t.clockYours.replace('{time}', clock(undefined)).replace('{diff}', relation);
+  } catch (e) {
+    /* Very old browser without Intl time zones: the "UTC−3 · Buenos Aires" fallback stays */
+  }
+}
+
+/* Keep both clocks on the minute */
+setInterval(function() { updateClocks(TRANSLATIONS[currentLang]); }, 15000);
 
 
 /* ════════════════════════════════════════════════

@@ -531,6 +531,14 @@ html.dark .theme-icon--moon { display: none; }
   font-weight: 500;
 }
 
+/* Local time: my clock on top, the visitor's below in a lighter tone */
+.fact-clocks span { display: block; }
+.fact-clocks #clock-yours {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.fact-clocks #clock-yours:empty { display: none; }
+
 /* In the facts card the chip can wrap to two lines */
 .facts .chip {
   align-items: flex-start;

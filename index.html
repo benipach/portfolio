@@ -279,7 +279,8 @@
 
           <dl class="facts">
             <div><dt data-i18n="factLocation">Location</dt><dd data-i18n="factLocationValue">Buenos Aires, Argentina</dd></div>
-            <div><dt data-i18n="factTimezone">Time zone</dt><dd data-i18n="factTimezoneValue">UTC−3 · 1–2 hours ahead of US Eastern</dd></div>
+            <!-- main.js writes both clocks and keeps them ticking; without JS the fallback stays -->
+            <div><dt data-i18n="factTime">Local time</dt><dd class="fact-clocks"><span id="clock-mine">UTC−3 · Buenos Aires</span><span id="clock-yours"></span></dd></div>
             <div><dt data-i18n="factEducation">Education</dt><dd data-i18n="factEducationValue">Computer Technician diploma (2026) · Systems Engineering at UTN, from 2027</dd></div>
             <div><dt data-i18n="factLanguages">Languages</dt><dd data-i18n="factLanguagesValue">Spanish (native) · English C1</dd></div>
             <div><dt data-i18n="factLooking">Looking for</dt><dd><span class="chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="factLookingValue">Remote part-time or contract developer role</span></span></dd></div>
