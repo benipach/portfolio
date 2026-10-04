@@ -148,7 +148,7 @@
                   <span class="project-date" data-i18n="f1Date">Apr 2026 – present</span>
                 </div>
                 <h4 class="project-title">Formula 1 Hub</h4>
-                <p class="project-desc" data-i18n="f1Desc">Every Grand Prix in one place: the calendar in your local time, live timing, full results and championship standings, plus driver and team profiles and an archive covering the history of the sport.</p>
+                <p class="project-desc" data-i18n="f1Desc">Every Grand Prix in one place: the calendar in your local time, live timing, full results and championship standings, plus driver and team profiles and an archive of every season since 1990.</p>
                 <div class="project-links">
                   <a href="https://benipach.github.io/f1-hub-project" target="_blank" rel="noopener" class="btn btn-primary">
                     <span data-i18n="projSite">View site</span>
@@ -163,9 +163,10 @@
               <div class="project-inside">
                 <p class="project-inside-label" data-i18n="projInside">Under the hood</p>
                 <ul class="project-highlights">
-                  <li data-i18n="f1H1">Live timing: a Node.js relay connects to F1's official live timing feed (SignalR over WebSocket) and streams it to the site. It's deployed on Render.</li>
-                  <li data-i18n="f1H2">A GitHub Actions job runs every 30 minutes on race weekends: when a session ends, it pulls results and weather from the OpenF1 API and commits the updated data.</li>
-                  <li data-i18n="f1H3">A season archive, still a work in progress, that aims to cover the full history of F1: standings, cumulative points charts and career stats precomputed from every season.</li>
+                  <li><strong data-i18n="f1H1Lead">Live timing relay.</strong> <span data-i18n="f1H1">A Node.js server on Render connects to F1's official live timing feed the same way formula1.com does (SignalR over WebSocket), merges 11 data streams into one state and pushes every update to the browsers that have the page open.</span></li>
+                  <li><strong data-i18n="f1H2Lead">A track map without GPS.</strong> <span data-i18n="f1H2">The public feed doesn't include car positions (only F1 TV accounts get them), so the map estimates them: it knows the last of ~25 timing checkpoints each car passed and moves it at the pace of its last lap until the next one.</span></li>
+                  <li><strong data-i18n="f1H3Lead">Accurate finishing laps.</strong> <span data-i18n="f1H3">The chequered-flag message can arrive after the leader has already crossed the line, so the server works out when each driver finished from the feed's own timestamps. It runs on the relay, which is always connected, so no crossing is missed even when nobody has the page open.</span></li>
+                  <li><strong data-i18n="f1H4Lead">Self-updating results.</strong> <span data-i18n="f1H4">A GitHub Actions workflow checks every 30 minutes on race weekends for sessions that ended without results. When it finds one, it pulls the data from the OpenF1 API, rebuilds the stats and commits them, so the site updates itself after every session.</span></li>
                 </ul>
                 <ul class="project-tech">
                   <li>JavaScript</li>

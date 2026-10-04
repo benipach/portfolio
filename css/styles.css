@@ -1024,6 +1024,12 @@ html.dark .theme-icon--moon { display: none; }
   background: var(--heading);
 }
 
+/* Bold lead-in at the start of each highlight, so they can be skimmed */
+.project-highlights strong {
+  font-weight: 600;
+  color: var(--heading);
+}
+
 .project-tech {
   display: flex;
   flex-wrap: wrap;
