@@ -915,8 +915,8 @@ html.dark .theme-icon--moon { display: none; }
   transition: transform 500ms var(--ease-swift);
 }
 
-.project:hover .project-cover img,
-.project:hover .project-cover video { transform: scale(1.04); }
+/* Only still images grow on hover: a video is already moving */
+.project:hover .project-cover img { transform: scale(1.04); }
 
 /* Cover for projects without an image: the name on navy */
 .project-cover--type {
