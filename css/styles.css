@@ -75,6 +75,9 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-height) + 16px);
   -webkit-text-size-adjust: 100%;
+  /* Phones paint a blue box over whatever you tap: the buttons and links already
+     react on their own, and keyboard focus keeps its :focus-visible outline */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Spanish-speaking visitor: the page stays hidden until main.js translates it
