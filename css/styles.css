@@ -20,7 +20,6 @@
   --on-soft:     #1A2766;  /* text on --soft (11.4:1) */
   --status:      #1D7A4C;  /* "in progress" dot (graphic, 4.4:1 on --soft) */
   --dash:        color-mix(in srgb, var(--text-muted) 55%, transparent); /* dashed borders and dividers (decorative) */
-  --line-faint:  color-mix(in srgb, var(--heading) 30%, transparent); /* link underline at rest */
   --cover-bg:    #1A2766;  /* text-only project cover */
   --cover-fg:    #F6F4EC;  /* name on --cover-bg (12.5:1) */
   --nav-bg:      rgb(246 244 236 / 0.88);
@@ -134,7 +133,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   outline-offset: 3px;
 }
 
-:where(.text-link, .nav-links a, .nav-mobile-menu a, .nav-logo):focus-visible { border-radius: 4px; }
+:where(.nav-links a, .nav-mobile-menu a, .nav-logo):focus-visible { border-radius: 4px; }
 
 .container {
   width: 100%;
@@ -176,7 +175,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   gap: 24px;
 }
 
-/* Menu links: the same solid line as .text-link, without the faint base line */
+/* Menu links: a solid line that draws in on hover (see Interactions) */
 .nav-links a {
   padding-block: 4px;
   font-size: 0.9375rem;
@@ -298,25 +297,25 @@ html.dark .theme-icon--moon { display: none; }
   .nav-hamburger { display: grid; }
 }
 
-/* ── Buttons and links ──
-   Four pieces, one visual language:
-   - .btn: an action. .btn-primary (filled) for the main one in each block,
-     .btn-secondary (outlined) for the alternative. One size only.
-   - .text-link: a link inside the content. A faint line underneath, with a solid one drawn over it.
-   - .icon-btn: navbar icon button (theme, menu). See Navigation.
-   - .lang-switcher: navbar segmented control. See Navigation.
-   Everything that leaves the site gets the ↗ arrow (.icon-ext).
-   The motion is always the same: whatever appears comes in from the left and,
-   when the mouse leaves, keeps going and exits to the right (it never goes back).
-   On press, buttons and icon buttons sink in slightly. */
+/* ── Buttons ──
+   Every action on the page is a .btn: a pill with an icon on the left that says
+   where it goes (globe = live site, GitHub logo = code, envelope = email...).
+   Three tones, by importance within each block:
+   - .btn-primary (filled): the main action. One per block.
+   - .btn-secondary (outlined): the alternative.
+   - .btn-soft (tinted): everything else.
+   Two modifiers: .btn-sm (compact project cards) and .btn-icon (icon only:
+   needs an aria-label; only for logos everyone recognizes).
+   Also in the navbar: .icon-btn (theme, menu) and .lang-switcher. See Navigation.
+   On hover they lift a little and their color deepens (see Interactions);
+   on press, buttons and icon buttons sink in slightly. */
 .btn {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 11px 22px;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px; /* comfortable to tap on a phone */
+  padding: 10px 20px 10px 17px; /* a bit less on the icon side, so it looks centered */
   border: 1.5px solid transparent;
   border-radius: 999px;
   font-size: 0.9375rem;
@@ -324,21 +323,12 @@ html.dark .theme-icon--moon { display: none; }
   font-stretch: 108%;
   line-height: 1.2;
   text-decoration: none;
-  /* The text color changes when the fill is halfway across (450ms total: 150 delay + 150) */
-  transition: color 150ms linear 150ms, border-color 150ms linear 150ms, transform 150ms var(--ease-swift);
-}
-
-/* Fill that sweeps across the button: it grows from the left and exits to the right.
-   main.js drives the states with .fx-left and .fx-on (see "Hover effects"),
-   so the animation always finishes even if the mouse leaves halfway. */
-.btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 450ms var(--ease-swift);
+  white-space: nowrap;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 250ms var(--ease-swift),
+    transform 250ms var(--ease-swift);
 }
 
 .btn-primary {
@@ -346,43 +336,43 @@ html.dark .theme-icon--moon { display: none; }
   color: var(--on-accent);
 }
 
-.btn-primary::before { background: var(--accent-hover); }
-
 .btn-secondary {
   border-color: var(--heading);
   color: var(--heading);
 }
 
-.btn-secondary::before { background: var(--accent); }
-
-/* Two background lines: the solid one (on top) is 0 wide until hover; the faint one (below) is always there.
-   At rest the solid line is anchored to the right, so it exits that way when it erases.
-   Like the .btn fill, it's driven by .fx-left and .fx-on from main.js. */
-.text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding-bottom: 3px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--heading);
-  text-decoration: none;
-  background:
-    linear-gradient(currentColor, currentColor) no-repeat 100% 100% / 0 1.5px,
-    linear-gradient(var(--line-faint), var(--line-faint)) no-repeat 0 100% / 100% 1px;
-  transition: background-size 450ms var(--ease-swift);
+.btn-soft {
+  background: var(--soft);
+  color: var(--on-soft);
 }
 
-/* ↗ arrow: the SVG has two copies of the arrow; the second one waits outside, at the
-   bottom left. On hover the group shifts diagonally: one exits through the corner and the other comes in. */
-.icon-ext {
-  width: 11px;
-  height: 11px;
+.btn-sm {
+  gap: 7px;
+  min-height: 38px;
+  padding: 7px 15px 7px 13px;
+  font-size: 0.875rem;
+}
+
+.btn-icon {
+  width: 44px;
+  padding: 0;
+}
+
+/* Icons: 24×24 SVGs drawn with currentColor, so they follow the text in both themes */
+.icon {
+  width: 17px;
+  height: 17px;
   flex: none;
-  overflow: hidden;
+  transition: transform 300ms var(--ease-spring);
 }
 
-.icon-ext g { transition: transform 450ms var(--ease-swift); }
+.btn-sm .icon { width: 15px; height: 15px; }
+.btn-icon .icon { width: 20px; height: 20px; }
+
+/* Copy email: the copy icon turns into a check for a moment (main.js adds .is-copied) */
+.icon--check,
+.is-copied .icon--copy { display: none; }
+.is-copied .icon--check { display: block; animation: icon-in 400ms var(--ease-spring); }
 
 /* ── Hero ── */
 .hero-inner {
@@ -430,7 +420,7 @@ html.dark .theme-icon--moon { display: none; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 16px;
+  gap: 10px;
   margin-top: 8px;
 }
 
@@ -592,19 +582,7 @@ html.dark .theme-icon--moon { display: none; }
   text-wrap: balance;
 }
 
-/* ── Background: timelines ──
-   Two vertical timelines side by side:
-   education on the left and experience on the right.
-   On phones they stack. */
-.path-cols {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-  gap: 32px clamp(28px, 4vw, 48px);
-}
-
-/* Column title (Education / Experience) and project group title (Featured / Other) */
-.path-col-title,
+/* Group title (Experience / Education, Featured / Other projects) */
 .group-title {
   margin-bottom: 18px;
   padding-bottom: 10px;
@@ -615,224 +593,80 @@ html.dark .theme-icon--moon { display: none; }
   color: var(--heading);
 }
 
-/* Continuous vertical line to the left of each column */
-.path {
-  position: relative;
+/* ── Background: résumé-style rows ──
+   When on the left (mono), what on the right.
+   Everything is visible at a glance; on phones the two columns stack. */
+.cv-item {
   display: grid;
-  gap: 12px;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 10px 28px;
+  padding-block: 24px;
 }
 
-.path::before {
-  content: "";
-  position: absolute;
-  left: 5px;
-  top: 24px;
-  bottom: 24px;
-  border-left: 1.5px solid var(--border);
-}
+.cv-item:first-child { padding-top: 4px; }
+.cv-item + .cv-item { border-top: 1px solid var(--border); }
 
-.path-item {
-  position: relative;
-  margin-left: 28px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  background: var(--surface);
-}
+/* Less room before "Education" than between project groups: the last row already has padding */
+.cv-list + .group-title--spaced { margin-top: clamp(28px, 4vw, 40px); }
 
-/* Dot for each stage: filled = finished, ring = in progress */
-.path-item::before {
-  content: "";
-  position: absolute;
-  left: -28px;
-  top: 22px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--heading);
-  box-shadow: 0 0 0 4px var(--bg);
-}
-
-.path-item--current::before {
-  background: var(--bg);
-  border: 2px solid var(--heading);
-}
-
-/* ── Background: collapsible cards ──
-   Each card is a <details>: the header (<summary>) spans the full width,
-   so tapping anywhere on it opens the card. */
-.path-summary {
-  display: grid;
-  gap: 8px;
-  padding: 20px;
-  list-style: none;
-  cursor: pointer;
-}
-
-.path-summary::-webkit-details-marker { display: none; }
-
-/* Focus is shown on the whole card, not just the header */
-@supports selector(:has(*)) {
-  .path-summary:focus-visible { outline: none; }
-
-  .path-item:has(.path-summary:focus-visible) {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-  }
-}
-
-/* "Show details ⌄" / "Hide details ⌃" */
-.path-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  justify-self: start;
-  margin-top: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  transition: color var(--ease);
-}
-
-.path-summary:hover .path-more { color: var(--heading); }
-
-.path-more-icon {
-  width: 12px;
-  height: 12px;
-  transition: transform 300ms var(--ease-swift);
-}
-
-.path-details[open] .path-more-icon { transform: rotate(180deg); }
-.path-details:not([open]) .path-more-hide,
-.path-details[open] .path-more-show { display: none; }
-
-.path-body { padding: 0 20px 20px; }
-
-/* Expands with an animation (in browsers that can animate to height: auto;
-   elsewhere it opens instantly) */
-@supports (interpolate-size: allow-keywords) {
-  .path-details { interpolate-size: allow-keywords; }
-
-  .path-details::details-content {
-    block-size: 0;
-    overflow-y: clip;
-    transition:
-      block-size 300ms var(--ease-swift),
-      content-visibility 300ms allow-discrete;
-  }
-
-  .path-details[open]::details-content { block-size: auto; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .path-details::details-content { transition: none; }
-  }
-}
-
-.path-top {
+.cv-when {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 6px;
-}
-
-.path-date {
+  padding-top: 3px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.8125rem;
 }
 
-/* Status chip: main.js hides it once the end date has passed
-   (needed because .chip's display: inline-flex overrides the browser's [hidden] style) */
-.path-status[hidden] { display: none; }
-
-/* Date + duration on the same line */
-.path-when {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 8px;
-}
+.cv-date { color: var(--text-muted); }
 
 /* Duration ("5 years 8 months"): calculated by main.js */
-.path-duration {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text);
+.cv-duration { color: var(--text); }
+.cv-duration:empty { display: none; }
+
+/* Status chip: main.js hides it when it no longer applies
+   (needed because .chip's display: inline-flex overrides the browser's [hidden] style) */
+.cv-status[hidden] { display: none; }
+
+.cv-what {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
 }
 
-.path-duration:not(:empty)::before {
-  content: "·";
-  margin-right: 8px;
-  color: var(--dash);
-}
-
-/* Phones: the duration drops below the date, so the
-   "In progress" / "Current" chip has room in the top-right corner */
-@media (max-width: 600px) {
-  /* The date takes two lines, so the chip aligns to the top corner */
-  .path-top { align-items: flex-start; }
-
-  .path-when {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .path-duration:not(:empty)::before { content: none; }
-}
-
-.path-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  font-stretch: 110%;
+.cv-title {
+  font-size: 1.2rem;
+  font-weight: 750;
+  font-stretch: 112%;
   line-height: 1.25;
   color: var(--heading);
+  text-wrap: balance;
 }
 
-.path-role {
-  font-size: 0.875rem;
+/* Where: right under the title, so the pair reads as one line of a résumé */
+.cv-org {
+  margin-top: -6px;
+  font-size: 0.9375rem;
   font-weight: 500;
 }
 
-.path-bullets li {
-  position: relative;
-  padding-left: 16px;
+.cv-desc,
+.cv-bullets li {
+  max-width: 68ch;
   font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--text-muted);
 }
 
-.path-bullets li + li { margin-top: 4px; }
+.cv-bullets { display: grid; gap: 4px; }
 
-/* Relevant school coursework */
-.path-areas {
-  display: grid;
-  gap: 12px;
+.cv-bullets li {
+  position: relative;
+  padding-left: 16px;
 }
 
-.path-areas > div {
-  display: grid;
-  gap: 6px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-}
-
-.path-areas dt {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.path-areas ul {
-  display: grid;
-  gap: 3px;
-}
-
-.path-areas li {
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-
-.path-bullets li::before {
+.cv-bullets li::before {
   content: "";
   position: absolute;
   left: 0;
@@ -842,48 +676,90 @@ html.dark .theme-icon--moon { display: none; }
   background: var(--heading);
 }
 
-@media (max-width: 760px) {
-  .path-cols { grid-template-columns: 1fr; }
-}
-
-/* ── Skills: one row per area ── */
-.skills-list > div {
+/* Relevant coursework: a label and the subjects in one flowing line */
+.cv-courses {
   display: grid;
-  grid-template-columns: 160px minmax(0, 1fr);
-  align-items: baseline;
-  gap: 8px 28px;
-  padding-block: 16px;
-  border-top: 1px solid var(--border);
+  gap: 6px;
 }
 
-.skills-list > div:last-child { border-bottom: 1px solid var(--border); }
-
-.skills-list dt {
+.cv-courses-label {
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 
-.skills-items {
+.cv-courses ul {
   display: flex;
   flex-wrap: wrap;
-  row-gap: 4px;
-  font-size: 1.0625rem;
-  font-weight: 500;
+  row-gap: 2px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 
-.skill { white-space: nowrap; }
-
-/* The separator goes at the end of each item: if the row wraps, the "/" stays
-   at the end of the line instead of starting the next one */
-.skill:not(:last-child)::after {
-  content: "/";
-  margin-inline: 10px;
+/* The separator goes at the end of each item: if the line wraps, it stays at the end of the line */
+.cv-courses li:not(:last-child)::after {
+  content: "·";
+  margin-inline: 8px;
   color: var(--dash);
 }
 
 @media (max-width: 600px) {
-  .skills-list > div { grid-template-columns: 1fr; }
+  .cv-item { grid-template-columns: 1fr; }
+
+  /* On phones the date, duration and chip sit on one line above the role */
+  .cv-when {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+  }
+}
+
+/* ── Skills: one card per area ──
+   Each technology with a short note on where I've used it.
+   Same card look as the compact project cards. */
+.stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+}
+
+.stack-group {
+  padding: clamp(20px, 3vw, 24px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.stack-title {
+  padding-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.stack-items li {
+  display: grid;
+  gap: 2px;
+  padding-block: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.stack-items li:last-child { padding-bottom: 0; }
+
+.stack-name {
+  font-size: 1.0625rem;
+  font-weight: 650;
+  font-stretch: 108%;
+  line-height: 1.3;
+  color: var(--heading);
+}
+
+.stack-where {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-muted);
 }
 
 /* ── Projects ──
@@ -1015,7 +891,7 @@ html.dark .theme-icon--moon { display: none; }
   color: var(--text-muted);
 }
 
-/* Technical highlights of a featured project (same dash as .path-bullets) */
+/* Technical highlights of a featured project (same dash as .cv-bullets) */
 .project-highlights {
   display: grid;
   gap: 10px;
@@ -1064,7 +940,7 @@ html.dark .theme-icon--moon { display: none; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 20px;
+  gap: 10px;
   margin-top: 4px;
 }
 
@@ -1174,21 +1050,8 @@ html.dark .theme-icon--moon { display: none; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 14px 32px;
-  padding-top: 24px;
-}
-
-.contact-others li {
-  display: inline-flex;
-  align-items: center;
   gap: 10px;
-}
-
-.contact-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  object-fit: cover;
+  padding-top: 24px;
 }
 
 /* ── Footer ── */
@@ -1210,19 +1073,28 @@ html.dark .theme-icon--moon { display: none; }
    the same way, so keyboard users see the same thing.
    ════════════════════════════════════════════════ */
 
-/* Lines and fills: main.js sets classes instead of relying on :hover, so each animation
-   finishes before the next one starts (see "Hover effects" in main.js).
-   .fx-left: anchored to the left (while drawing). .fx-on: fully drawn. */
+/* Buttons: they lift 2px over a soft shadow in their own color, and the tone deepens.
+   Only with a real mouse (hover: hover), so a tap on a phone doesn't leave them stuck up;
+   keyboard focus gets the same look anywhere. */
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
 
-/* Buttons: the fill sweeps from left to right.
-   On the secondary button it's navy, so the text and border switch to the --accent color. */
-.btn.fx-left::before { transform-origin: left center; }
-.btn.fx-on::before { transform: scaleX(1); }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary:hover { background: var(--soft); }
+  .btn-soft:hover { background: color-mix(in srgb, var(--accent) 16%, var(--soft)); }
 
-.btn-secondary.fx-on {
-  border-color: var(--accent);
-  color: var(--on-accent);
+  /* The icon gives a small nudge: "View projects" points down, the rest grow a little */
+  .btn:hover .icon { transform: scale(1.12); }
+  .btn:hover .icon--down { transform: translateY(2px); }
 }
+
+.btn:focus-visible { transform: translateY(-2px); }
+.btn-primary:focus-visible { background: var(--accent-hover); }
+.btn-secondary:focus-visible { background: var(--soft); }
+.btn-soft:focus-visible { background: color-mix(in srgb, var(--accent) 16%, var(--soft)); }
 
 /* Icon buttons: soft fill and a stronger border */
 .icon-btn:is(:hover, :focus-visible) {
@@ -1238,10 +1110,9 @@ html.dark .theme-icon--moon { display: none; }
 .btn:active,
 .icon-btn:active { transform: scale(0.96); }
 
-/* Links: the solid line draws in from the left and exits to the right on leave */
-.text-link.fx-left { background-position: 0 100%, 0 100%; }
-.text-link.fx-on { background-size: 100% 1.5px, 100% 1px; }
+.btn:active { box-shadow: none; transition-duration: 100ms; }
 
+/* Nav links: the line draws in from the left and exits to the right on leave */
 .nav-links a.fx-left { background-position: 0 100%; }
 .nav-links a.fx-on { background-size: 100% 1.5px; }
 
@@ -1250,13 +1121,6 @@ html.dark .theme-icon--moon { display: none; }
 .nav-mobile-menu a:is(:hover, :focus-visible) { color: var(--text-muted); }
 
 .lang-opt:not(.active):is(:hover, :focus-visible) { color: var(--heading); }
-
-/* ↗ arrow: it exits through the top corner and the copy comes in from below */
-.fx-on .icon-ext g { transform: translate(12px, -12px); }
-
-/* "Show details": the chevron nudges toward where the card is about to move */
-.path-summary:hover .path-more-icon { transform: translateY(2px); }
-.path-details[open] .path-summary:hover .path-more-icon { transform: rotate(180deg) translateY(2px); }
 
 /* On theme change, the new icon spins in (main.js adds the class) */
 html.theme-switching .theme-icon { animation: icon-in 600ms var(--ease-spring); }

@@ -122,7 +122,7 @@ function updateDurations(t) {
 
   function unit(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
-  document.querySelectorAll('.path-duration').forEach(function(el) {
+  document.querySelectorAll('.cv-duration').forEach(function(el) {
     var start = toMonths(el.getAttribute('data-start'));
     var end = Math.min(toMonths(el.getAttribute('data-end')), currentMonth);
     var total = Math.max(end - start + 1, 1);
@@ -141,9 +141,14 @@ function updateDurations(t) {
     }
 
     /* Once the end date has passed, hide the "In progress" / "Current" chip */
-    var item = el.closest('.path-item');
-    var status = item && item.querySelector('.path-status');
+    var item = el.closest('.cv-item');
+    var status = item && item.querySelector('.cv-status');
     if (status) status.hidden = toMonths(el.getAttribute('data-end')) < currentMonth;
+  });
+
+  /* "Upcoming": hidden once its month arrives */
+  document.querySelectorAll('.cv-status[data-until]').forEach(function(el) {
+    el.hidden = toMonths(el.getAttribute('data-until')) <= currentMonth;
   });
 }
 
@@ -328,9 +333,9 @@ if ('IntersectionObserver' in window) {
 
 
 /* ════════════════════════════════════════════════
-   Hover effects — lines and fills that always finish
-   The line under links and the fill of buttons grow from the left
-   and leave through the right. If the mouse leaves halfway, the line
+   Hover effects — nav link lines that always finish
+   The line under the navbar links grows from the left and leaves
+   through the right. If the mouse leaves halfway, the line
    first finishes drawing and only then erases; if it comes back while
    erasing, it waits for the erase to end and draws again. That way it
    never jumps mid-way. CSS draws the states: .fx-left anchors the line
@@ -339,7 +344,7 @@ if ('IntersectionObserver' in window) {
 (function() {
   var FALLBACK_MS = 800; /* in case transitionend never fires (e.g. the element gets hidden) */
 
-  document.querySelectorAll('.btn, .text-link, .nav-links a').forEach(function(el) {
+  document.querySelectorAll('.nav-links a').forEach(function(el) {
     var state = 'idle'; /* idle → drawing → drawn → erasing → idle */
     var wanted = false; /* mouse over it, or keyboard focus */
     var timer;
@@ -388,12 +393,9 @@ if ('IntersectionObserver' in window) {
     el.addEventListener('focus', function() { if (el.matches(':focus-visible')) enter(); });
     el.addEventListener('blur', leave);
 
-    /* Only the line or the fill counts: not the text color, the arrow or the press effect */
+    /* Only the line counts, not the text color */
     el.addEventListener('transitionend', function(e) {
-      if (e.target !== el) return;
-      var isLine = e.propertyName === 'background-size';
-      var isFill = e.propertyName === 'transform' && e.pseudoElement === '::before';
-      if (isLine || isFill) finished();
+      if (e.target === el && e.propertyName === 'background-size') finished();
     });
   });
 })();
@@ -411,11 +413,16 @@ if ('IntersectionObserver' in window) {
   if (!btn || !status) return;
   var hideTimer;
 
+  /* While the message shows, the button's copy icon becomes a check (only when it was copied) */
   function show(key) {
     status.textContent = TRANSLATIONS[currentLang][key];
     status.classList.add('is-visible');
+    btn.classList.toggle('is-copied', key === 'contactCopied');
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(function() { status.classList.remove('is-visible'); }, 2400);
+    hideTimer = setTimeout(function() {
+      status.classList.remove('is-visible');
+      btn.classList.remove('is-copied');
+    }, 2400);
   }
 
   function selectAddress() {
